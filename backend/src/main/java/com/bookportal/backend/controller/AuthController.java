@@ -15,6 +15,12 @@ import com.bookportal.backend.repository.RoleRepository;
 import com.bookportal.backend.service.RefreshTokenService;
 import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;
+import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseCookie;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -31,6 +37,8 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -55,6 +63,11 @@ public class AuthController {
         this.refreshTokenRepository = refreshTokenRepository;
         this.roleRepository = roleRepository;
     }
+
+    @Value("${cookie.secure:false}")
+    private boolean cookieSecure;
+    @Value("${cookie.sameSite:Lax}")
+    private String cookieSameSite;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
@@ -98,7 +111,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest request,  HttpServletResponse response) {
         try{
             authenticationManager.authenticate(
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
@@ -111,21 +124,32 @@ public class AuthController {
         String token = jwtService.generateToken(user);
         RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(user);
 
-        Map<String, String> response = Map.of(
-                "token", token,
-                "refreshToken", refreshToken.getToken()
-        );
+        log.info("cookiesecurevalue: {}", cookieSecure);
+        log.info("🔍 cookieSameSite: {}", cookieSameSite);
 
-        return ResponseEntity.ok(response);
+        ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .sameSite(cookieSameSite)
+                .path("/api")
+                .maxAge(7 * 24 * 60 * 60)
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
+
+        return ResponseEntity.ok(Map.of("accessToken", token));
     }
 
     @PostMapping("/refresh")
     public ResponseEntity<?> refreshToken(
-            @RequestBody Map<String, String> request
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+            HttpServletResponse response
     ) {
-        String refreshToken = request.get("refreshToken");
 
+        log.info("🔍 Received refresh request");
+        log.info("Cookie value from client: {}", refreshToken);
         if (refreshToken == null || refreshToken.isEmpty()) {
+            log.warn("⚠️ No refreshToken cookie found in request!");
             throw new AuthException(ErrorMessages.MISSING_REFRESH_TOKEN.getMessage());
         }
 
@@ -133,28 +157,45 @@ public class AuthController {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshTokenEntity::getUser)
                 .map(user -> {
+                    log.info("🔑 Issuing new access token for {}", user.getUsername());
                     String newAccessToken = jwtService.generateToken(user);
                     RefreshTokenEntity newRefreshToken = refreshTokenService.createRefreshToken(user);
-                    return ResponseEntity.ok((Map.of(
-                            "token", newAccessToken,
-                            "refreshToken", newRefreshToken.getToken()
-                    )));
+                    ResponseCookie newCookie = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
+                            .httpOnly(true)
+                            .secure(cookieSecure)
+                            .sameSite(cookieSameSite)
+                            .path("/api")
+                            .maxAge(7 * 24 * 60 * 60)
+                            .build();
+
+                    response.addHeader(HttpHeaders.SET_COOKIE, newCookie.toString());
+
+                    return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
                 })
                 .orElseThrow(() -> new AuthException(ErrorMessages.INVALID_REFRESH_TOKEN.getMessage()));
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
-        String requestToken = request.get("refreshToken");
+    public ResponseEntity<?> logout(
+            @CookieValue(value = "refreshToken", required = false) String refreshToken,
+                                    HttpServletResponse response) {
 
-        return refreshTokenRepository.findByToken(requestToken)
-                .map(token -> {
-                    refreshTokenRepository.delete(token);
-                    return ResponseEntity.ok(
-                            new MessageResponse(SuccessMessages.LOGGED_OUT.getMessage())
-                    );
-                })
-                .orElseThrow(() -> new AuthException(ErrorMessages.INVALID_REFRESH_TOKEN.getMessage()));
+        if (refreshToken != null) {
+            refreshTokenRepository.findByToken(refreshToken)
+                    .ifPresent(refreshTokenRepository::delete);
+        }
+
+        ResponseCookie clearCookie = ResponseCookie.from("refreshToken", "")
+                .httpOnly(true)
+                .secure(cookieSecure)
+                .path("/api")
+                .maxAge(0)
+                .sameSite(cookieSameSite)
+                .build();
+
+        response.addHeader(HttpHeaders.SET_COOKIE, clearCookie.toString());
+
+        return ResponseEntity.ok(Map.of("message", SuccessMessages.LOGGED_OUT.getMessage()));
     }
 
 

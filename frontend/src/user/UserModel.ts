@@ -5,7 +5,6 @@ export type User = {
   id: number;
   username: string;
   role: UserRole;
-   accessToken?: string;
 };
 
 export type RegisterUserRequest = {

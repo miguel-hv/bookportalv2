@@ -1,5 +1,6 @@
 import type { LoginUserRequest, RegisterUserRequest, User } from "../user/UserModel";
 import api from "../lib/fetchWithAuth";
+import type { LoginResponse } from "./models/LoginResponse";
 
 let accessToken: string | null = null;
 
@@ -9,7 +10,6 @@ export const authService = {
   },
 
   setAccessToken(token: string) {
-    accessToken = token;
     localStorage.setItem("accessToken", token);
   },
 
@@ -20,16 +20,16 @@ export const authService = {
 
   async registerUser(data: RegisterUserRequest): Promise<User> {
     try {
-      const res = await api.post<User>("/register", data);
+      const res = await api.post<User>("/auth/register", data);
       return res.data;
     } catch (error: any) {
       throw new Error(error.response?.data?.message || "Failed to register user");
     }
   },
 
-  async loginUser(data: LoginUserRequest): Promise<User> {
+  async loginUser(data: LoginUserRequest): Promise<LoginResponse> {
     try {
-      const res = await api.post<User>("/login", data);
+      const res = await api.post<LoginResponse>("/auth/login", data);
       if (res.data.accessToken) this.setAccessToken(res.data.accessToken);
       return res.data;
     } catch (error: any) {
@@ -39,7 +39,7 @@ export const authService = {
 
   async logoutUser(): Promise<void> {
     try {
-      await api.post("/logout");
+      await api.post("/auth/logout");
     } catch (error: any) {
       console.error("Logout failed", error);
     } finally {
@@ -48,9 +48,9 @@ export const authService = {
   },
 
   async refreshToken(): Promise<void> {
-    try {
-      const res = await api.post<{ accessToken: string }>("/refresh");
-      if (res.data.accessToken) this.setAccessToken(res.data.accessToken);
+   try {
+    const res = await api.post<{ accessToken: string }>("/auth/refresh", undefined, { headers: { Authorization: "" } });
+    if (res.data.accessToken) this.setAccessToken(res.data.accessToken);
     } catch (error) {
       this.clearAccessToken();
       throw error;

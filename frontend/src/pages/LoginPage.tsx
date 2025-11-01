@@ -8,12 +8,12 @@ export default function LoginPage() {
 
   const handleLogin = async (data: { username: string; password: string }) => {
     await authService.loginUser(data);
-    navigate("/");
+    navigate("/users");
   };
 
   return (
     <>
-      <LoginForm onSubmit={handleLogin} />;
+      <LoginForm onSubmit={handleLogin} />
        <div className="text-center text-sm text-gray-600">
           Don’t have an account?{' '}
           <Link

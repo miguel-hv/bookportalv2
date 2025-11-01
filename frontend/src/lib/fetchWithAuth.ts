@@ -2,7 +2,7 @@ import axios from "axios";
 import { authService } from "../auth/authService";
 
 const api = axios.create({
-  baseURL: "http://localhost:4000",
+  baseURL: import.meta.env.VITE_API_URL,
   withCredentials: true,
 });
 
@@ -15,16 +15,25 @@ api.interceptors.request.use((config) => {
 api.interceptors.response.use(
   (res) => res,
   async (error) => {
-    if (error.response?.status === 401 && !error.config._retry) {
-      error.config._retry = true;
+    const originalRequest = error.config;
+
+   if (
+      error.response?.status === 401 &&
+      !originalRequest._retry &&
+      !originalRequest.url.includes("/auth/refresh") &&
+      !originalRequest.url.includes("/auth/login")
+    ) {
+      originalRequest._retry = true;
       try {
         await authService.refreshToken();
         const newToken = authService.getAccessToken();
-        if (newToken) error.config.headers.Authorization = `Bearer ${newToken}`;
-        return api.request(error.config);
+        if (newToken)
+          originalRequest.headers.Authorization = `Bearer ${newToken}`;
+        return api.request(originalRequest);
       } catch {
-        authService.logoutUser();
-        window.location.href = "/login";
+        console.log("fetchwith auth failed refresh")
+        // authService.logoutUser();
+        // window.location.href = "/login";
       }
     }
     return Promise.reject(error);
