@@ -16,8 +16,6 @@ import com.bookportal.backend.service.RefreshTokenService;
 import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;
 import jakarta.servlet.http.HttpServletResponse;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -38,7 +36,6 @@ import java.util.Set;
 @RequestMapping("/api/auth")
 public class AuthController {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
     private final AuthenticationManager authenticationManager;
     private final JwtService jwtService;
@@ -124,9 +121,6 @@ public class AuthController {
         String token = jwtService.generateToken(user);
         RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(user);
 
-        log.info("cookiesecurevalue: {}", cookieSecure);
-        log.info("🔍 cookieSameSite: {}", cookieSameSite);
-
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
                 .httpOnly(true)
                 .secure(cookieSecure)
@@ -146,10 +140,7 @@ public class AuthController {
             HttpServletResponse response
     ) {
 
-        log.info("🔍 Received refresh request");
-        log.info("Cookie value from client: {}", refreshToken);
         if (refreshToken == null || refreshToken.isEmpty()) {
-            log.warn("⚠️ No refreshToken cookie found in request!");
             throw new AuthException(ErrorMessages.MISSING_REFRESH_TOKEN.getMessage());
         }
 
@@ -157,7 +148,6 @@ public class AuthController {
                 .map(refreshTokenService::verifyExpiration)
                 .map(RefreshTokenEntity::getUser)
                 .map(user -> {
-                    log.info("🔑 Issuing new access token for {}", user.getUsername());
                     String newAccessToken = jwtService.generateToken(user);
                     RefreshTokenEntity newRefreshToken = refreshTokenService.createRefreshToken(user);
                     ResponseCookie newCookie = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
