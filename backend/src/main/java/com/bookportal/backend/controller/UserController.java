@@ -2,9 +2,12 @@ package com.bookportal.backend.controller;
 
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.service.UserService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.bookportal.backend.util.ErrorMessages;
+import com.bookportal.backend.util.SuccessMessages;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -22,4 +25,22 @@ public class UserController {
     public List<UserEntity> getUserList() {
         return service.getAllUsers();
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<String> deleteUser(
+            @PathVariable Long id,
+            Authentication authentication) {
+
+        boolean isAdmin = authentication.getAuthorities().stream()
+                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
+
+        if (!isAdmin) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(ErrorMessages.NOT_ALLOWED_ROLE.getMessage());
+        }
+
+        service.deleteUserById(id);
+        return ResponseEntity.ok(SuccessMessages.USER_DELETED.getMessage());
+    }
+
 }

@@ -11,6 +11,7 @@ public enum ErrorMessages {
     INVALID_JWT("Invalid JWT"),
     INVALID_ROLE("Invalid role."),
     NO_ROLES_FOUND("User must have at least one role"),
+    NOT_ALLOWED_ROLE("Role not allowed"),
     UNEXPECTED_ERROR("An unexpected error occurred.");
 
     private final String message;
