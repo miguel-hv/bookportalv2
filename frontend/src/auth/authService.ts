@@ -44,6 +44,7 @@ export const authService = {
       console.error("Logout failed", error);
     } finally {
       this.clearAccessToken();
+        window.location.href = "/login";
     }
   },
 

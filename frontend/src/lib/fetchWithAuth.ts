@@ -31,9 +31,8 @@ api.interceptors.response.use(
           originalRequest.headers.Authorization = `Bearer ${newToken}`;
         return api.request(originalRequest);
       } catch {
-        console.log("fetchwith auth failed refresh")
-        // authService.logoutUser();
-        // window.location.href = "/login";
+        authService.logoutUser();
+        window.location.href = "/login";
       }
     }
     return Promise.reject(error);
