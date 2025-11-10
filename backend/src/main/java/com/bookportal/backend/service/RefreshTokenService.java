@@ -3,7 +3,6 @@ package com.bookportal.backend.service;
 import com.bookportal.backend.entity.RefreshTokenEntity;
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.repository.RefreshTokenRepository;
-import com.bookportal.backend.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
