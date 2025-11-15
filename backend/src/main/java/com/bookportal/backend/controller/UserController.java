@@ -1,5 +1,6 @@
 package com.bookportal.backend.controller;
 
+import com.bookportal.backend.dto.UserDto;
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.service.UserService;
 import com.bookportal.backend.util.ErrorMessages;
@@ -22,7 +23,7 @@ public class UserController {
     }
 
     @GetMapping("/user-list")
-    public List<UserEntity> getUserList() {
+    public List<UserDto> getUserList() {
         return service.getAllUsers();
     }
 

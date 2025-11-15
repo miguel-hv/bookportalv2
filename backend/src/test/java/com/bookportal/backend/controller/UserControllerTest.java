@@ -1,5 +1,6 @@
 package com.bookportal.backend.controller;
 
+import com.bookportal.backend.dto.UserDto;
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.service.UserService;
 import com.bookportal.backend.util.ErrorMessages;
@@ -31,16 +32,16 @@ class UserControllerTest {
     @InjectMocks
     private UserController controller;
 
-    private UserEntity user1;
-    private UserEntity user2;
-    private List<UserEntity> users;
+    private UserDto user1;
+    private UserDto user2;
+    private List<UserDto> users;
 
     @BeforeEach
     void setUp() {
-        user1 = new UserEntity();
+        user1 = new UserDto();
         user1.setUsername("john");
 
-        user2 = new UserEntity();
+        user2 = new UserDto();
         user2.setUsername("jane");
 
         users = List.of(user1, user2);
@@ -50,7 +51,7 @@ class UserControllerTest {
     void getUserList_shouldReturnListOfUsers() {
         when(userService.getAllUsers()).thenReturn(users);
 
-        List<UserEntity> result = controller.getUserList();
+        List<UserDto> result = controller.getUserList();
 
         assertNotNull(result);
         assertEquals(2, result.size());

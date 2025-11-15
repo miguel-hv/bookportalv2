@@ -1,5 +1,6 @@
 package com.bookportal.backend.service;
 
+import com.bookportal.backend.dto.UserDto;
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -41,11 +42,11 @@ class UserServiceTest {
 
         when(userRepository.findAll()).thenReturn(List.of(user1, user2));
 
-        List<UserEntity> result = userService.getAllUsers();
+        List<UserDto> result = userService.getAllUsers();
 
         assertThat(result)
                 .hasSize(2)
-                .extracting(UserEntity::getUsername)
+                .extracting(UserDto::getUsername)
                 .containsExactlyInAnyOrder("alice", "bob");
 
         verify(userRepository, times(1)).findAll();
@@ -57,7 +58,7 @@ class UserServiceTest {
 
         when(userRepository.findAll()).thenReturn(Collections.emptyList());
 
-        List<UserEntity> result = userService.getAllUsers();
+        List<UserDto> result = userService.getAllUsers();
 
         assertThat(result).isEmpty();
         verify(userRepository, times(1)).findAll();
