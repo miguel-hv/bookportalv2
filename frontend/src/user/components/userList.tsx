@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from 'react';
 import type { User } from '../UserModel';
-import { fetchUsers } from '../userService';
+import { deleteUser, fetchUsers } from '../userService';
 
 export default function UserList () {
     const [users, setUsers] = useState<User[]>([]);
@@ -24,6 +24,19 @@ export default function UserList () {
     loadUsers();
   }, []);
 
+    const handleDelete = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this user?")) return;
+
+    try {
+      await deleteUser(id);
+
+      // Remove deleted user from the list
+      setUsers((prev) => prev.filter((u) => u.id !== id));
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
+
   if (loading) return <p>Loading users...</p>;
   if (error) return <p className="text-red-500">Error: {error}</p>;
 
@@ -32,9 +45,17 @@ export default function UserList () {
       <h1 className="text-2xl font-bold mb-4">User List</h1>
       <ul className="space-y-2">
         {users.map((user) => (
-          <li key={user.id} className="p-3 border rounded-lg shadow-sm">
-            <p className="font-medium">{user.username}</p>
-            <p className="text-sm text-gray-500">{user.role}</p>
+          <li key={user.id} className="p-3 border rounded-lg shadow-sm flex justify-between">
+            <div className='flex gap-4 items-center'>
+              <p className="font-medium">{user.username}</p>
+              <p className="text-sm text-gray-500">{user.role.join(", ")}</p>
+            </div>
+             <button
+              onClick={() => handleDelete(user.id)}
+              className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+            >
+              Delete
+            </button>
           </li>
         ))}
       </ul>

@@ -1,10 +1,9 @@
-
-export type UserRole = 'USER' | 'ADMIN';
+export type UserRole = "ROLE_USER" | "ROLE_ADMIN";
 
 export type User = {
   id: number;
   username: string;
-  role: UserRole;
+  role: UserRole[];
 };
 
 export type RegisterUserRequest = {
