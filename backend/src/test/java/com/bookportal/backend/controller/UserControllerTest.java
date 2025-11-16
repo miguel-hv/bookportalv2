@@ -79,7 +79,7 @@ class UserControllerTest {
         };
 
         // Call the controller method
-        ResponseEntity<String> response = controller.deleteUser(1L, auth);
+        ResponseEntity<?> response = controller.deleteUser(1L, auth);
 
         // Assertions
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
@@ -105,7 +105,7 @@ class UserControllerTest {
 
         doNothing().when(userService).deleteUserById(1L);
 
-        ResponseEntity<String> response = controller.deleteUser(1L, auth);
+        ResponseEntity<?> response = controller.deleteUser(1L, auth);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(SuccessMessages.USER_DELETED.getMessage(), response.getBody());

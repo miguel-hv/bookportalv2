@@ -1,5 +1,6 @@
 package com.bookportal.backend.controller;
 
+import com.bookportal.backend.dto.MessageResponse;
 import com.bookportal.backend.dto.UserDto;
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.service.UserService;
@@ -28,7 +29,7 @@ public class UserController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteUser(
+    public ResponseEntity<?> deleteUser(
             @PathVariable Long id,
             Authentication authentication) {
 
@@ -37,11 +38,11 @@ public class UserController {
 
         if (!isAdmin) {
             return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(ErrorMessages.NOT_ALLOWED_ROLE.getMessage());
+                    .body(new MessageResponse(ErrorMessages.NOT_ALLOWED_ROLE.getMessage()));
         }
 
         service.deleteUserById(id);
-        return ResponseEntity.ok(SuccessMessages.USER_DELETED.getMessage());
+        return ResponseEntity.ok(new MessageResponse(SuccessMessages.USER_DELETED.getMessage()));
     }
 
 }
