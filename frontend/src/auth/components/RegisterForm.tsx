@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import InputField from './InputField';
-import type { RegisterUserRequest, UserRole } from '../../user/UserModel';
+import type { RegisterUserRequest, UserRoleRegister } from '../../user/UserModel';
 
 type RegisterFormProps = {
   onSubmit: (data: RegisterUserRequest) => Promise<void>;
@@ -9,7 +9,7 @@ type RegisterFormProps = {
 export default function RegisterForm({ onSubmit }: RegisterFormProps) {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [role, setRole] = useState<UserRole>('USER');
+  const [role, setRole] = useState<UserRoleRegister>('USER');
   const [verifyPassword, setVerifyPassword] = useState('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
@@ -42,7 +42,7 @@ export default function RegisterForm({ onSubmit }: RegisterFormProps) {
         <label className="block text-sm font-medium mb-1">Role</label>
         <select
           value={role}
-          onChange={(e) => setRole(e.target.value as UserRole)}
+          onChange={(e) => setRole(e.target.value as UserRoleRegister)}
           className="w-full border rounded-lg px-3 py-2"
         >
           <option value="USER">User</option>

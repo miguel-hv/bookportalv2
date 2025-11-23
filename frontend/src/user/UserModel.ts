@@ -1,4 +1,5 @@
 export type UserRole = "ROLE_USER" | "ROLE_ADMIN";
+export type UserRoleRegister = "USER" | "ADMIN";
 
 export type User = {
   id: number;
@@ -9,7 +10,7 @@ export type User = {
 export type RegisterUserRequest = {
   username: string;
   password: string;
-  role: UserRole;
+  role: UserRoleRegister;
 };
 
 export type LoginUserRequest = {

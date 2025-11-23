@@ -1,4 +1,4 @@
-import { Routes, Route, Outlet } from "react-router-dom";
+import { Routes, Route, Outlet, Navigate } from "react-router-dom";
 import './App.css'
 import RegisterPage from "./pages/RegisterPage";
 import LoginPage from "./pages/LoginPage";
@@ -20,22 +20,15 @@ function App() {
       <Routes>
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
-         <Route element={<Layout />}>
-    <Route path="/users" element={
-      <AuthGuard>
-        <UserList />
-      </AuthGuard>
-    } />
-    
-  </Route>
-        <Route
-          path="/users"
-          element={
+        <Route element={<Layout />}>
+          <Route path="/" element={<Navigate to="/users" replace />} />
+          <Route path="/users" element={
             <AuthGuard>
               <UserList />
             </AuthGuard>
-          }
-        />
+          } />
+      
+        </Route>
       </Routes>
   );
 }
