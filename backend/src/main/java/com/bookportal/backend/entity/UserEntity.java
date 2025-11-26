@@ -30,6 +30,9 @@ public class UserEntity implements UserDetails {
             inverseJoinColumns = @JoinColumn(name = "role_id"))
     private Set<RoleEntity> roles = new HashSet<>();
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<BookEntity> books = new HashSet<>();
+
     public Long getId() { return id; }
 
     @Override
@@ -53,6 +56,9 @@ public class UserEntity implements UserDetails {
                 .map(role -> new SimpleGrantedAuthority(role.getName().name()))
                 .collect(Collectors.toSet());
     }
+
+    public Set<BookEntity> getBooks() { return books; }
+    public void setBooks(Set<BookEntity> books) { this.books = books; }
 
     @PrePersist
     @PreUpdate
