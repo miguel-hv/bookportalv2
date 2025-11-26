@@ -88,12 +88,12 @@ public class AuthController {
 
         Set<RoleEntity> roles = new HashSet<>();
         RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER)
-                .orElseThrow(() -> new RuntimeException("Role not found: ROLE_USER"));
+                .orElseThrow(() -> new RuntimeException(ErrorMessages.ROLE_NOT_FOUND.getMessage()));
         roles.add(userRole);
 
         if (eRole == ERole.ROLE_ADMIN) {
             RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
-                    .orElseThrow(() -> new RuntimeException("Role not found: ROLE_ADMIN"));
+                    .orElseThrow(() -> new RuntimeException(ErrorMessages.ROLE_NOT_FOUND.getMessage()));
             roles.add(adminRole);
         }
         UserEntity user = new UserEntity();

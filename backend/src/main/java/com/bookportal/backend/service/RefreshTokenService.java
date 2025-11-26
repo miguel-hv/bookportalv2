@@ -3,6 +3,7 @@ package com.bookportal.backend.service;
 import com.bookportal.backend.entity.RefreshTokenEntity;
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.repository.RefreshTokenRepository;
+import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -32,7 +33,7 @@ public class RefreshTokenService {
     public RefreshTokenEntity verifyExpiration(RefreshTokenEntity token) {
         if (token.getExpiryDate().isBefore(Instant.now())) {
             refreshTokenRepository.delete(token);
-            throw new RuntimeException("Refresh token expired");
+            throw new RuntimeException(ErrorMessages.REFRESH_TOKEN_EXPIRED.getMessage());
         }
         return token;
     }

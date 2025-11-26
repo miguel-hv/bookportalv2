@@ -1,5 +1,6 @@
 package com.bookportal.backend.mapper;
 
+import com.bookportal.backend.dto.BookCreateRequest;
 import com.bookportal.backend.dto.BookDto;
 import com.bookportal.backend.entity.BookEntity;
 
@@ -17,6 +18,16 @@ public class BookMapper {
     }
 
     public static BookEntity toEntity(BookDto dto) {
+        if (dto == null) return null;
+
+        BookEntity entity = new BookEntity();
+        entity.setTitle(dto.getTitle());
+        entity.setAuthor(dto.getAuthor());
+        entity.setReview(dto.getReview());
+        return entity;
+    }
+
+    public static BookEntity fromCreateRequest(BookCreateRequest dto) {
         if (dto == null) return null;
 
         BookEntity entity = new BookEntity();
