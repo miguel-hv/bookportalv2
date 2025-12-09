@@ -17,7 +17,7 @@ export default function Header() {
         Users List
         </li>
         <li className="text-lg font-semibold cursor-pointer"
-        onClick={() => navigate("/users")}
+        onClick={() => navigate("/books")}
       >
         Books List
 

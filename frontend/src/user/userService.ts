@@ -12,6 +12,17 @@ export async function fetchUsers(): Promise<User[]> {
   }
 }
 
+export async function fetchUserById(id: number): Promise<User>  {
+  try {
+    const res = await api.get(`/user/${id}`);
+    return res.data;
+  } catch (error) {
+    console.error("Error fetching users:", error);
+    throw error;
+  }
+  }
+
+
 export async function deleteUser(userId: number): Promise<null> {
   try {
     const response = await api.delete<null>(`/user/${userId}`);

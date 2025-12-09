@@ -1,8 +1,7 @@
-'use client';
-
 import { useEffect, useState } from 'react';
 import type { User } from '../UserModel';
 import { deleteUser, fetchUsers } from '../userService';
+import { Link } from 'react-router-dom';
 
 export default function UserList () {
     const [users, setUsers] = useState<User[]>([]);
@@ -50,6 +49,13 @@ export default function UserList () {
               <p className="font-medium">{user.username}</p>
               <p className="text-sm text-gray-500">{user.role.join(", ")}</p>
             </div>
+            <Link
+              to={`/users/${user.id}/books`}
+              className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+            >
+              View Books
+            </Link>
+
              <button
               onClick={() => handleDelete(user.id)}
               className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"

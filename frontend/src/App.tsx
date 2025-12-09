@@ -5,6 +5,7 @@ import LoginPage from "./pages/LoginPage";
 import AuthGuard from "./auth/authGuard";
 import UserList from "./user/components/userList";
 import Header from "./components/Header";
+import BookList from "./book/components/BookList";
 
 function Layout() {
   return (
@@ -25,6 +26,11 @@ function App() {
           <Route path="/users" element={
             <AuthGuard>
               <UserList />
+            </AuthGuard>
+          } />
+          <Route path="/users/:userId/books" element={
+            <AuthGuard>
+              <BookList />
             </AuthGuard>
           } />
       
