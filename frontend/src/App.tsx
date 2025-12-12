@@ -5,7 +5,9 @@ import LoginPage from "./pages/LoginPage";
 import AuthGuard from "./auth/authGuard";
 import UserList from "./user/components/userList";
 import Header from "./components/Header";
-import BookList from "./book/components/BookList";
+import AddBookPage from "./pages/AddBookPage";
+import BookListPage from "./pages/BookListPage";
+import UserBookListPage from "./pages/UserBookListPage";
 
 function Layout() {
   return (
@@ -30,7 +32,17 @@ function App() {
           } />
           <Route path="/users/:userId/books" element={
             <AuthGuard>
-              <BookList />
+              <UserBookListPage />
+            </AuthGuard>
+          } />
+          <Route path="/books" element={
+            <AuthGuard>
+              <BookListPage />
+            </AuthGuard>
+          } />
+           <Route path="/books/:userId/add" element={
+            <AuthGuard>
+              <AddBookPage />
             </AuthGuard>
           } />
       

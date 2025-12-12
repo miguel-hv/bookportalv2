@@ -1,45 +1,26 @@
-'use client'; // (not needed in plain React, you can remove it)
-
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import type { User } from "../../user/UserModel";
-import { fetchUserById } from "../../user/userService";
+import type { Book } from "../models/BookModel";
+import { bookService } from "../bookService";
 
-export default function BookList() {
-  const { userId } = useParams();
-  const [user, setUser] = useState<User | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+type Props = {
+  userName?: string;
+  books: Book[];
+};
 
-  useEffect(() => {
-    const load = async () => {
-      try {
-        const data = await fetchUserById(Number(userId));
-        setUser(data);
-      } catch (err: any) {
-        setError(err.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-    load();
-  }, [userId]);
-
-  if (loading) return <p>Loading books...</p>;
-  if (error) return <p className="text-red-500">{error}</p>;
-  if (!user) return <p>User not found.</p>;
-
+export default function BookList({ userName, books }: Props) {
   return (
     <div className="p-6">
-      <h1 className="text-xl font-bold mb-4">
-        Books by {user.username}
-      </h1>
+     {userName && (
+        <h1 className="text-xl font-bold mb-4">
+          Books by {userName}
+        </h1>
+      )}
 
-      {user.books.length === 0 ? (
+      {books.length === 0 ? (
         <p>No books.</p>
       ) : (
         <ul className="space-y-3">
-          {user.books.map((book) => (
+          {books.map((book) => (
             <li key={book.id} className="p-4 border rounded shadow-sm">
               <h2 className="font-semibold">{book.title}</h2>
               <p className="text-sm text-gray-600">Author: {book.author}</p>

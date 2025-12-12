@@ -1,0 +1,25 @@
+import api from "../lib/fetchWithAuth";
+import type { AddBookRequest, Book } from "./models/BookModel";
+
+export const bookService = {
+
+
+    async fetchAllBooks(): Promise<Book[]>  {
+        try {
+            const res = await api.get(`/books`);
+            return res.data;
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            throw error;
+        }
+    },
+
+    async addBook(userId: number, data: AddBookRequest): Promise<Book> {
+        try {
+            const res = await api.post<Book>(`/user/${userId}/books`, data);
+            return res.data;
+        } catch (error: any) {
+            throw new Error(error.response?.data?.message || "Failed to register user");
+        }
+    }
+}

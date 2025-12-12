@@ -20,7 +20,7 @@ export async function fetchUserById(id: number): Promise<User>  {
     console.error("Error fetching users:", error);
     throw error;
   }
-  }
+}
 
 
 export async function deleteUser(userId: number): Promise<null> {
