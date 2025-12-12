@@ -8,6 +8,7 @@ import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.entity.enums.ERole;
 import com.bookportal.backend.exception.AuthException;
 import com.bookportal.backend.exception.ValidationException;
+import com.bookportal.backend.mapper.UserMapper;
 import com.bookportal.backend.model.LoginRequest;
 import com.bookportal.backend.model.RegisterRequest;
 import com.bookportal.backend.repository.RefreshTokenRepository;
@@ -120,6 +121,7 @@ public class AuthController {
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token = jwtService.generateToken(user);
         RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(user);
+        var userResponse = UserMapper.toDto(user);
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
                 .httpOnly(true)
@@ -131,7 +133,10 @@ public class AuthController {
 
         response.addHeader(HttpHeaders.SET_COOKIE, refreshCookie.toString());
 
-        return ResponseEntity.ok(Map.of("accessToken", token));
+        return ResponseEntity.ok(Map.of(
+                "accessToken", token,
+                "user", userResponse
+        ));
     }
 
     @PostMapping("/refresh")

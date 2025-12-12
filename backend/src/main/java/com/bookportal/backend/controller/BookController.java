@@ -17,7 +17,7 @@ public class BookController {
         this.bookService = bookService;
     }
 
-    @PostMapping("/users/{userId}/books")
+    @PostMapping("/user/{userId}/books")
     public BookDto addBookToUser(@PathVariable Long userId, @RequestBody BookCreateRequest request) {
         return bookService.addBookToUser(userId, request);
     }
