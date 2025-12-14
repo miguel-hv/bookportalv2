@@ -1,11 +1,14 @@
 package com.bookportal.backend.service;
 
 import com.bookportal.backend.dto.UserDto;
+import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.mapper.UserMapper;
 import com.bookportal.backend.repository.UserRepository;
+import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class UserService {
@@ -21,6 +24,11 @@ public class UserService {
                 .stream()
                 .map(UserMapper::toDto)
                 .toList();
+    }
+
+    public UserDto getUserById(Long userId) {
+         return repository.findById(userId).map(UserMapper::toDto)
+                 .orElseThrow(() -> new RuntimeException(ErrorMessages.USER_NOT_FOUND.getMessage()));
     }
 
     public void deleteUserById(Long id) {

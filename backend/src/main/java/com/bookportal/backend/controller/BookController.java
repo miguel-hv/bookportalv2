@@ -22,6 +22,11 @@ public class BookController {
         return bookService.addBookToUser(userId, request);
     }
 
+    @GetMapping("/user/{userId}/books")
+    public List<BookDto> getUserBooks (@PathVariable Long userId) {
+        return bookService.getUserBooks(userId);
+    }
+
     @GetMapping("/books")
     public List<BookDto> getAllBooks() {
         return bookService.getAllBooks();

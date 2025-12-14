@@ -28,6 +28,11 @@ public class UserController {
         return service.getAllUsers();
     }
 
+    @GetMapping("/user/{id}")
+    public UserDto getUserById(@PathVariable Long id) {
+        return service.getUserById(id);
+    }
+
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(
             @PathVariable Long id,
