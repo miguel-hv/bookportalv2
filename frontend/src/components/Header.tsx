@@ -3,6 +3,7 @@ import { authService } from "../auth/authService";
 
 export default function Header() {
   const navigate = useNavigate();
+  const user = authService.getUser(); 
 
   const onLogout = () => {
     authService.logoutUser();
@@ -12,15 +13,19 @@ export default function Header() {
     <header className="flex items-center justify-between bg-blue-400 text-white px-6 py-3 shadow-md">
       <ul className="flex gap-4">
         <li className="text-lg font-semibold cursor-pointer"
-        onClick={() => navigate("/users")}
-      >
-        Users List
+          onClick={() => navigate("/users")}
+        >
+          Users List
         </li>
         <li className="text-lg font-semibold cursor-pointer"
-        onClick={() => navigate("/books")}
-      >
-        Books List
-
+          onClick={() => navigate("/books")}
+        >
+          Books List
+        </li>
+        <li className="text-lg font-semibold cursor-pointer"
+          onClick={() => navigate(`/books/${user?.id}/add`)}
+        >
+          Create Book
         </li>
       </ul>
 

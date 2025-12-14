@@ -1,12 +1,15 @@
 // pages/BookListPage.tsx
 import { useEffect, useState } from "react";
 import { bookService } from "../book/bookService";
-import { authService } from "../auth/authService";
 import type { Book } from "../book/models/BookModel";
 import BookList from "../book/components/BookList";
+import { useLocation, useNavigate } from "react-router-dom";
 
 export default function UserBookListPage() {
-  const user = authService.getUser();
+  const navigate = useNavigate();
+  const  { state } = useLocation();
+  const user = state?.user;
+  const userId = user?.id;
   const [bookList, setBookList] = useState<Book[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -14,8 +17,13 @@ export default function UserBookListPage() {
   useEffect(() => {
     const load = async () => {
       try {
-        const data = await bookService.fetchAllBooks();
-        setBookList(data);
+        if (userId) {
+          const data = await bookService.fetchUserBooks(userId);
+          setBookList(data);
+          return;
+        }
+        alert("You must be logged in to create a book.");
+        navigate("/login");
       } catch (err: any) {
         setError(err.message);
       } finally {
@@ -23,7 +31,7 @@ export default function UserBookListPage() {
       }
     };
     load();
-  }, [user?.id]);
+  }, [userId]);
 
   if (!user) return <p>Please log in to view your books.</p>;
   if (loading) return <p>Loading books...</p>;

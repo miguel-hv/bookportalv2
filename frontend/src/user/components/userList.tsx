@@ -51,18 +51,12 @@ export default function UserList () {
             </div>
             <Link
               to={`/users/${user.id}/books`}
+              state={{ user }}
               className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
             >
               View Books
             </Link>
-            <Link
-              to={`/books/${user.id}/add`}
-              className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
-            >
-              Create Books
-            </Link>
-
-             <button
+            <button
               onClick={() => handleDelete(user.id)}
               className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
             >

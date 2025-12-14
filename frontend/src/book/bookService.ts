@@ -21,5 +21,15 @@ export const bookService = {
         } catch (error: any) {
             throw new Error(error.response?.data?.message || "Failed to register user");
         }
-    }
+    },
+
+    async fetchUserBooks(userId: number): Promise<Book[]>  {
+        try {
+            const res = await api.get(`/user/${userId}/books`);
+            return res.data;
+        } catch (error) {
+            console.error("Error fetching users:", error);
+            throw error;
+        }
+    },
 }

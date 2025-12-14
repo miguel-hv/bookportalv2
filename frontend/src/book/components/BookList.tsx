@@ -1,6 +1,4 @@
-import { useEffect, useState } from "react";
 import type { Book } from "../models/BookModel";
-import { bookService } from "../bookService";
 
 type Props = {
   userName?: string;
