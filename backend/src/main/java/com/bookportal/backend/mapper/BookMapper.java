@@ -2,6 +2,7 @@ package com.bookportal.backend.mapper;
 
 import com.bookportal.backend.dto.BookCreateRequest;
 import com.bookportal.backend.dto.BookDto;
+import com.bookportal.backend.dto.BookUserDto;
 import com.bookportal.backend.entity.BookEntity;
 
 public class BookMapper {
@@ -14,6 +15,18 @@ public class BookMapper {
                 entity.getTitle(),
                 entity.getAuthor(),
                 entity.getReview()
+        );
+    }
+
+    public static BookUserDto toBookUserDto(BookEntity entity) {
+        if (entity == null) return null;
+
+        return new BookUserDto(
+                entity.getId(),
+                entity.getTitle(),
+                entity.getAuthor(),
+                entity.getReview(),
+                UserMapper.toDto(entity.getUser())
         );
     }
 

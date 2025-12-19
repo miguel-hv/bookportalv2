@@ -1,22 +1,24 @@
 package com.bookportal.backend.dto;
 
-import com.bookportal.backend.entity.RoleEntity;
 import io.swagger.v3.oas.annotations.Hidden;
 
 import java.util.Set;
 
 @Hidden
-public class UserDto {
+public class UserBookDto {
+
     private Long id;
     private String username;
-    private  Set<String> role;
+    private Set<String> role;
+    private  Set<BookDto> books;
 
-    public UserDto() {}
+    public UserBookDto() {}
 
-    public UserDto(Long id, String username,  Set<String> role) {
+    public UserBookDto(Long id, String username,  Set<String> role, Set<BookDto> books) {
         this.id = id;
         this.username = username;
         this.role = role;
+        this.books = books;
     }
 
     public Long getId() { return id; }
@@ -27,4 +29,7 @@ public class UserDto {
 
     public   Set<String> getRole() { return role; }
     public void setRole( Set<String> role) { this.role = role; }
+
+    public Set<BookDto> getBooks() { return books; }
+    public void setBooks(Set<BookDto> books) { this.books = books; }
 }

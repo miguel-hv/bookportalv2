@@ -1,5 +1,6 @@
 package com.bookportal.backend.service;
 
+import com.bookportal.backend.dto.UserBookDto;
 import com.bookportal.backend.dto.UserDto;
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.repository.UserRepository;

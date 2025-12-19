@@ -1,8 +1,8 @@
 package com.bookportal.backend.controller;
 
 import com.bookportal.backend.dto.MessageResponse;
+import com.bookportal.backend.dto.UserBookDto;
 import com.bookportal.backend.dto.UserDto;
-import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.service.UserService;
 import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;

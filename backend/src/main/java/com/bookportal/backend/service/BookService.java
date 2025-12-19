@@ -2,6 +2,7 @@ package com.bookportal.backend.service;
 
 import com.bookportal.backend.dto.BookCreateRequest;
 import com.bookportal.backend.dto.BookDto;
+import com.bookportal.backend.dto.BookUserDto;
 import com.bookportal.backend.entity.BookEntity;
 import com.bookportal.backend.entity.UserEntity;
 import com.bookportal.backend.mapper.BookMapper;
@@ -43,10 +44,10 @@ public class BookService {
                 .toList();
     }
 
-    public List<BookDto> getAllBooks() {
+    public List<BookUserDto> getAllBooks() {
         return bookRepository.findAll()
                 .stream()
-                .map(BookMapper::toDto)
+                .map(BookMapper::toBookUserDto)
                 .toList();
     }
 

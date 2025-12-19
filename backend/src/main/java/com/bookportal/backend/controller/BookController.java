@@ -2,6 +2,7 @@ package com.bookportal.backend.controller;
 
 import com.bookportal.backend.dto.BookCreateRequest;
 import com.bookportal.backend.dto.BookDto;
+import com.bookportal.backend.dto.BookUserDto;
 import com.bookportal.backend.service.BookService;
 import org.springframework.web.bind.annotation.*;
 
@@ -28,7 +29,7 @@ public class BookController {
     }
 
     @GetMapping("/books")
-    public List<BookDto> getAllBooks() {
+    public List<BookUserDto> getAllBooks() {
         return bookService.getAllBooks();
     }
 
