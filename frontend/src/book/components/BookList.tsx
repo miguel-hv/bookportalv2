@@ -3,9 +3,10 @@ import type { Book } from "../models/BookModel";
 type Props = {
   userName?: string;
   books: Book[];
+  onDelete?: (id: number) => void;
 };
 
-export default function BookList({ userName, books }: Props) {
+export default function BookList({ userName, books, onDelete }: Props) {
   return (
     <div className="p-6">
      {userName && (
@@ -25,6 +26,16 @@ export default function BookList({ userName, books }: Props) {
               {book.review && (
                 <p className="italic text-gray-500 mt-1">{book.review}</p>
               )}
+              {
+                onDelete &&
+                <button
+                  onClick={() => onDelete(book.id)}
+                  className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
+                >
+                  Delete
+                </button>
+              }
+
             </li>
           ))}
         </ul>

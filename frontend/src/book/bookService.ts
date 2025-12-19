@@ -3,7 +3,6 @@ import type { AddBookRequest, Book } from "./models/BookModel";
 
 export const bookService = {
 
-
     async fetchAllBooks(): Promise<Book[]>  {
         try {
             const res = await api.get(`/books`);
@@ -32,4 +31,15 @@ export const bookService = {
             throw error;
         }
     },
+
+    async deleteBook(bookId: number): Promise<null> {
+        try {
+            const response = await api.delete<null>(`/books/${bookId}`);
+            console.log(response.data)
+            return response.data;
+        } catch (error) {
+            console.error("Error deleting user:", error);
+            throw error;
+        }
+    }
 }

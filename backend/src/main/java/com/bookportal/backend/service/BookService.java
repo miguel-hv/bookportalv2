@@ -57,6 +57,12 @@ public class BookService {
                 .orElseThrow(() -> new RuntimeException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
     }
 
+    public BookEntity findEntityById(Long id) {
+        return bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
+    }
+
     public void deleteBook(Long id) {
         bookRepository.deleteById(id);
     }

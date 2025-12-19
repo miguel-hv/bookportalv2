@@ -8,6 +8,18 @@ export default function BookListPage() {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const handleDelete = async (id: number) => {
+    if (!confirm("Are you sure you want to delete this user?")) return;
+
+    try {
+      await bookService.deleteBook(id);
+
+      setBookList((prev) => prev.filter((b) => b.id !== id));
+    } catch (err: any) {
+      alert(err.message);
+    }
+  };
+
   useEffect(() => {
     const load = async () => {
       try {
@@ -25,5 +37,5 @@ export default function BookListPage() {
   if (loading) return <p>Loading books...</p>;
   if (error) return <p className="text-red-500">{error}</p>;
 
-  return <BookList books={bookList} />;
+  return <BookList books={bookList} onDelete={handleDelete} />;
 }
