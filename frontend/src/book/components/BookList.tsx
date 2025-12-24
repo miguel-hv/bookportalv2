@@ -4,9 +4,10 @@ type Props = {
   userName?: string;
   books: Book[];
   onDelete?: (id: number) => void;
+  onEdit?: (book: Book) => void;
 };
 
-export default function BookList({ userName, books, onDelete }: Props) {
+export default function BookList({ userName, books, onDelete, onEdit }: Props) {
   return (
     <div className="p-6">
      {userName && (
@@ -33,6 +34,15 @@ export default function BookList({ userName, books, onDelete }: Props) {
                   className="px-3 py-1 bg-red-500 text-white rounded hover:bg-red-600"
                 >
                   Delete
+                </button>
+              }
+              {
+                onEdit &&
+                <button
+                  onClick={() => onEdit(book)}
+                  className="px-3 py-1 bg-blue-500 text-white rounded hover:bg-blue-600"
+                >
+                  Edit
                 </button>
               }
 

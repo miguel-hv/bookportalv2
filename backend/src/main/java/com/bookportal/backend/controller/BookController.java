@@ -1,9 +1,6 @@
 package com.bookportal.backend.controller;
 
-import com.bookportal.backend.dto.BookCreateRequest;
-import com.bookportal.backend.dto.BookDto;
-import com.bookportal.backend.dto.BookUserDto;
-import com.bookportal.backend.dto.MessageResponse;
+import com.bookportal.backend.dto.*;
 import com.bookportal.backend.entity.BookEntity;
 import com.bookportal.backend.service.BookService;
 import com.bookportal.backend.util.ErrorMessages;
@@ -43,6 +40,22 @@ public class BookController {
     @GetMapping("/books/{id}")
     public BookDto getBook(@PathVariable Long id) {
         return bookService.getBookById(id);
+    }
+
+    @PatchMapping("/books/{id}")
+    public ResponseEntity<?> editBook(@PathVariable Long id, @RequestBody BookPatchRequest request, Authentication authentication) {
+        BookEntity book = bookService.findEntityById(id);
+
+        String username = authentication.getName();
+        boolean isOwner = book.getUser().getUsername().equals(username);
+
+        if (!isOwner) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body(new MessageResponse(ErrorMessages.NOT_ALLOWED_USER_ID.getMessage()));
+        }
+
+        return ResponseEntity.ok(bookService.updateBookById(id, request));
+
     }
 
     @DeleteMapping("/books/{id}")

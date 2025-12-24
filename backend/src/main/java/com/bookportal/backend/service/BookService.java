@@ -2,6 +2,7 @@ package com.bookportal.backend.service;
 
 import com.bookportal.backend.dto.BookCreateRequest;
 import com.bookportal.backend.dto.BookDto;
+import com.bookportal.backend.dto.BookPatchRequest;
 import com.bookportal.backend.dto.BookUserDto;
 import com.bookportal.backend.entity.BookEntity;
 import com.bookportal.backend.entity.UserEntity;
@@ -61,6 +62,24 @@ public class BookService {
         return bookRepository.findById(id)
                 .orElseThrow(() ->
                         new RuntimeException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
+    }
+
+    public BookDto updateBookById(Long id, BookPatchRequest request) {
+        BookEntity book = bookRepository.findById(id)
+                .orElseThrow(() ->
+                        new RuntimeException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
+
+        if (request.getTitle() != null) {
+            book.setTitle(request.getTitle());
+        }
+        if (request.getAuthor() != null) {
+            book.setAuthor(request.getAuthor());
+        }
+        if (request.getReview() != null) {
+            book.setReview(request.getReview());
+        }
+
+        return BookMapper.toDto(bookRepository.save(book));
     }
 
     public void deleteBook(Long id) {

@@ -10,3 +10,9 @@ export type AddBookRequest = {
   author:string;
   review: string;
 };
+
+export type EditBookRequest = {
+  title?: string;
+  author?:string;
+  review?: string;
+};

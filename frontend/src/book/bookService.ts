@@ -1,5 +1,5 @@
 import api from "../lib/fetchWithAuth";
-import type { AddBookRequest, Book } from "./models/BookModel";
+import type { AddBookRequest, Book, EditBookRequest } from "./models/BookModel";
 
 export const bookService = {
 
@@ -38,7 +38,19 @@ export const bookService = {
             console.log(response.data)
             return response.data;
         } catch (error) {
-            console.error("Error deleting user:", error);
+            console.error("Error deleting book:", error);
+            throw error;
+        }
+    },
+
+    async editBook(bookId: number, book: EditBookRequest): Promise<Book> {
+
+        try {
+            const response = await api.patch<Book>(`/books/${bookId}`, book);
+            console.log(response)
+            return response.data;
+        } catch (error) {
+            console.error("Error editing book:", error);
             throw error;
         }
     }
