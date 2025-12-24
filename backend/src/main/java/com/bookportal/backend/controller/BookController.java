@@ -50,11 +50,6 @@ public class BookController {
         boolean isAdmin = authentication.getAuthorities().stream().anyMatch(
                 a -> a.getAuthority().equals("ROLE_ADMIN"));
 
-        if (!isAdmin) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse(ErrorMessages.NOT_ALLOWED_ROLE.getMessage()));
-        }
-
         BookEntity book = bookService.findEntityById(id);
 
         String username = authentication.getName();
