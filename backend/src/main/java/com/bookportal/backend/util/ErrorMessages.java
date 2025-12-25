@@ -16,6 +16,7 @@ public enum ErrorMessages {
     ROLE_NOT_FOUND("Role not found"),
     NOT_ALLOWED_ROLE("Role not allowed"),
     NOT_ALLOWED_USER_ID("User id not allowed"),
+    NOT_ALLOWED_USER("User not allowed"),
     UNEXPECTED_ERROR("An unexpected error occurred."),
     BOOK_NOT_FOUND("Book not found");
 

@@ -14,9 +14,8 @@ public class GlobalExceptionHandler {
     // 🔹 Authentication or authorization errors → 401
     @ExceptionHandler(AuthException.class)
     public ResponseEntity<MessageResponse> handleAuth(AuthException ex) {
-        String resolvedMessage = ErrorMessageResolver.resolve(ex.getMessage());
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(new MessageResponse(resolvedMessage));
+                .body(new MessageResponse(ex.getError().getMessage()));
     }
 
     // 🔹 Validation errors → 400
@@ -42,9 +41,8 @@ public class GlobalExceptionHandler {
 
     // 🔹 Fallback for truly unexpected errors → 500
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<MessageResponse> handleAllExceptions(Exception ex) {
-        String resolvedMessage = ErrorMessageResolver.resolve(ex.getMessage());
+    public ResponseEntity<MessageResponse> handleUnexpected(Exception ex) {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                .body(new MessageResponse(resolvedMessage));
+                .body(new MessageResponse(ErrorMessages.UNEXPECTED_ERROR.getMessage()));
     }
 }

@@ -115,7 +115,7 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
         } catch (Exception e) {
-            throw new AuthException(ErrorMessages.INVALID_CREDENTIALS.getMessage());
+            throw new AuthException(ErrorMessages.INVALID_CREDENTIALS);
         }
 
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
@@ -146,7 +146,7 @@ public class AuthController {
     ) {
 
         if (refreshToken == null || refreshToken.isEmpty()) {
-            throw new AuthException(ErrorMessages.MISSING_REFRESH_TOKEN.getMessage());
+            throw new AuthException(ErrorMessages.MISSING_REFRESH_TOKEN);
         }
 
         return refreshTokenRepository.findByToken(refreshToken)
@@ -167,7 +167,7 @@ public class AuthController {
 
                     return ResponseEntity.ok(Map.of("accessToken", newAccessToken));
                 })
-                .orElseThrow(() -> new AuthException(ErrorMessages.INVALID_REFRESH_TOKEN.getMessage()));
+                .orElseThrow(() -> new AuthException(ErrorMessages.INVALID_REFRESH_TOKEN));
     }
 
     @PostMapping("/logout")

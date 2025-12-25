@@ -7,6 +7,7 @@ import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -43,37 +44,19 @@ public class BookController {
     }
 
     @PatchMapping("/books/{id}")
-    public ResponseEntity<?> editBook(@PathVariable Long id, @RequestBody BookPatchRequest request, Authentication authentication) {
+    @PreAuthorize("@bookSecurity.isOwner(#id, authentication.name)")
+    public ResponseEntity<?> editBook(@PathVariable Long id, @RequestBody BookPatchRequest request) {
         BookEntity book = bookService.findEntityById(id);
-
-        String username = authentication.getName();
-        boolean isOwner = book.getUser().getUsername().equals(username);
-
-        if (!isOwner) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse(ErrorMessages.NOT_ALLOWED_USER_ID.getMessage()));
-        }
 
         return ResponseEntity.ok(bookService.updateBookById(id, request));
 
     }
 
     @DeleteMapping("/books/{id}")
+    @PreAuthorize(
+            "@bookSecurity.isOwner(#id, authentication.name) or hasRole('ADMIN')"
+    )
     public ResponseEntity<?>  deleteBook(@PathVariable Long id, Authentication authentication) {
-        boolean isAdmin = authentication.getAuthorities().stream().anyMatch(
-                a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        BookEntity book = bookService.findEntityById(id);
-
-        String username = authentication.getName();
-
-        boolean isOwner = book.getUser().getUsername().equals(username);
-
-        if (!isAdmin && !isOwner) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse(ErrorMessages.NOT_ALLOWED_ROLE.getMessage()));
-        }
-
         bookService.deleteBook(id);
 
         return ResponseEntity.ok(

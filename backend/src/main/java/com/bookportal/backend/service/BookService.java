@@ -6,6 +6,7 @@ import com.bookportal.backend.dto.BookPatchRequest;
 import com.bookportal.backend.dto.BookUserDto;
 import com.bookportal.backend.entity.BookEntity;
 import com.bookportal.backend.entity.UserEntity;
+import com.bookportal.backend.exception.ResourceNotFoundException;
 import com.bookportal.backend.mapper.BookMapper;
 import com.bookportal.backend.repository.BookRepository;
 import com.bookportal.backend.repository.UserRepository;
@@ -27,7 +28,7 @@ public class BookService {
 
     public BookDto addBookToUser(Long userId, BookCreateRequest request) {
         UserEntity user = userRepository.findById(userId)
-                .orElseThrow(() -> new RuntimeException(ErrorMessages.USER_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.USER_NOT_FOUND.getMessage()));
 
         BookEntity book = BookMapper.fromCreateRequest(request);
         book.setUser(user);
@@ -55,19 +56,19 @@ public class BookService {
     public BookDto getBookById(Long id) {
         return bookRepository.findById(id)
                 .map(BookMapper::toDto)
-                .orElseThrow(() -> new RuntimeException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
+                .orElseThrow(() -> new ResourceNotFoundException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
     }
 
     public BookEntity findEntityById(Long id) {
         return bookRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
+                        new ResourceNotFoundException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
     }
 
     public BookDto updateBookById(Long id, BookPatchRequest request) {
         BookEntity book = bookRepository.findById(id)
                 .orElseThrow(() ->
-                        new RuntimeException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
+                        new ResourceNotFoundException(ErrorMessages.BOOK_NOT_FOUND.getMessage()));
 
         if (request.getTitle() != null) {
             book.setTitle(request.getTitle());
