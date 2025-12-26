@@ -1,7 +1,6 @@
 package com.bookportal.backend.exception;
 
 import com.bookportal.backend.dto.MessageResponse;
-import com.bookportal.backend.util.ErrorMessageResolver;
 import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
