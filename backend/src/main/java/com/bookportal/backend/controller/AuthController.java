@@ -16,7 +16,10 @@ import com.bookportal.backend.repository.RoleRepository;
 import com.bookportal.backend.service.RefreshTokenService;
 import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -67,8 +70,14 @@ public class AuthController {
     @Value("${cookie.sameSite:Lax}")
     private String cookieSameSite;
 
+    @Operation(
+            summary = "Register a new user",
+            description = "Creates a new user account. Password must meet complexity requirements."
+    )
+    @ApiResponse(responseCode = "200", description = "User registered successfully")
+    @ApiResponse(responseCode = "400", description = "Validation error")
     @PostMapping("/register")
-    public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
+    public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             throw new ValidationException(ErrorMessages.USERNAME_EXISTS.getMessage());
         }
