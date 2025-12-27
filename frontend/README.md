@@ -20,6 +20,9 @@ jwt authentication with two authorization levels: user and admin.
 
 Refresh token is implementend with a guard in frontend so it redirects to login when no token is found.
 
+### Backend
+Java with Spring. Swagger added (http://localhost:8080/swagger-ui). Book Controller is the one with annotations in swagger and using declarative security.
+
 ### Database access
 Using Hibernate/JPA. QueryDSL can be used to mimic the LINQ deferred query representation used in C# to prevent N+1 issues. 
 
