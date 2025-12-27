@@ -33,6 +33,7 @@ public class UserController {
         return service.getUserById(id);
     }
 
+    //TODO: use declarative security (see BookController)
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(
             @PathVariable Long id,

@@ -15,7 +15,7 @@ export const bookService = {
 
     async addBook(userId: number, data: AddBookRequest): Promise<Book> {
         try {
-            const res = await api.post<Book>(`/user/${userId}/books`, data);
+            const res = await api.post<Book>(`/user/${userId}/book`, data);
             return res.data;
         } catch (error: any) {
             throw new Error(error.response?.data?.message || "Failed to register user");
