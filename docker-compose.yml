@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  frontend:
+    build:
+      context: ./frontend
+      target: dev
+    ports:
+      - "5173:5173"
+    volumes:
+      - ./frontend:/app
+      - /app/node_modules
+    environment:
+      - VITE_API_URL=http://localhost:8080/api
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+  backend:
+    build:
+      context: ./backend
+      target: dev
+    ports:
+      - "8080:8080"
+    volumes:
+      - ./backend:/app
+      - /app/.mvn
+      - /app/target
+    environment:
+      - SPRING_PROFILES_ACTIVE=dev
+      - FRONTEND_URL=http://frontend:5173
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
