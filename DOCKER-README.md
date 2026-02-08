@@ -20,7 +20,8 @@ make dev-docker
 Access your application:
 - **Frontend**: http://localhost:5173 (Vite dev server with hot-reload)
 - **Backend API**: http://localhost:8080/api
-- **H2 Console**: http://localhost:8080/h2-console
+- **PostgreSQL**: localhost:5432 (bookportal/bookportal)
+- **H2 Console**: Not available in Docker environments
 
 ### Docker Production
 ```bash
@@ -30,6 +31,7 @@ make prod-docker
 Access your application:
 - **Frontend**: http://localhost:80 (nginx serving production build)
 - **Backend API**: http://localhost:8080/api
+- **PostgreSQL**: localhost:5432 (credentials from .env.prod)
 
 ## Architecture
 
@@ -42,22 +44,27 @@ Access your application:
 
 ### Backend (Spring Boot)
 - **Runtime**: Eclipse Temurin JDK 17
-- **Database**: In-memory H2 (all environments)
+- **Database**: H2 (local), PostgreSQL (Docker dev/prod)
 - **Profiles**: `default` (local), `dev` (Docker), `prod` (Docker production)
 - **CORS**: Environment-specific configuration
-- **Access**: H2 Console at /h2-console
+- **Migrations**: Flyway for PostgreSQL environments
+- **Connection Pooling**: HikariCP in production
+- **Access**: H2 Console only in local development
 
 ## Container Configuration
 
 ### Development Docker Compose
 - **Frontend**: Port 5173, volume mounts for source code
 - **Backend**: Port 8080, volume mounts for source code
+- **PostgreSQL**: Port 5432, no data persistence (fresh each restart)
 - **Network**: Internal bridge for service communication
 - **Environment**: Docker-friendly service discovery
 
 ### Production Docker Compose
 - **Frontend**: Port 80, optimized nginx serving
 - **Backend**: Port 8080, production-optimized JAR
+- **PostgreSQL**: Port 5432, persistent data volume
+- **Security**: Environment variables from .env.prod file
 - **Network**: Internal bridge for service communication
 
 ## Environment Variables

@@ -30,6 +30,19 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - FRONTEND_URL=http://frontend:5173
+    depends_on:
+      - postgres
+    networks:
+      - app-network
+
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_DB=bookportal
+      - POSTGRES_USER=bookportal
+      - POSTGRES_PASSWORD=bookportal
     networks:
       - app-network
 

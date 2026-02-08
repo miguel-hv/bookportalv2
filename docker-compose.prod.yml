@@ -20,11 +20,34 @@ services:
       target: prod
     ports:
       - "8080:8080"
+    env_file:
+      - .env.prod
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - FRONTEND_URL=http://frontend
+    depends_on:
+      - postgres
     networks:
       - app-network
+
+  postgres:
+    image: postgres:15-alpine
+    ports:
+      - "5432:5432"
+    env_file:
+      - .env.prod
+    environment:
+      - POSTGRES_DB=bookportal
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - app-network
+
+volumes:
+  postgres_data:
+    driver: local
 
 networks:
   app-network:
