@@ -23,6 +23,10 @@ Access your application:
 - **PostgreSQL**: localhost:5432 (bookportal/bookportal)
 - **H2 Console**: Not available in Docker environments
 
+**Test Accounts (Auto-seeded on startup):**
+- Admin: `admin` / `Password1!` (1 book)
+- User: `user` / `Password1!` (2 books)
+
 ### Docker Production
 ```bash
 make prod-docker
@@ -104,6 +108,14 @@ make clean          # Clean up containers and images
 make logs           # Show container logs
 make help           # Show all available commands
 ```
+
+## Development Seed Data
+
+Docker development automatically seeds test data on startup. See [DOCKER_DEV_SEED.md](DOCKER_DEV_SEED.md) for detailed information.
+
+**Quick Reference:**
+- Admin: `admin` / `Password1!` (1 book)
+- User: `user` / `Password1!` (2 books)
 
 ## Traditional Docker Commands (for reference)
 

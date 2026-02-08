@@ -43,6 +43,8 @@ services:
       - POSTGRES_DB=bookportal
       - POSTGRES_USER=bookportal
       - POSTGRES_PASSWORD=bookportal
+    volumes:
+      - ./backend/src/main/resources/db/seed/dev-seed-data.sql:/docker-entrypoint-initdb.d/01-seed-data.sql
     networks:
       - app-network
 
