@@ -1,5 +1,6 @@
 package com.bookportal.backend.controller;
 
+import com.bookportal.backend.dto.MessageResponse;
 import com.bookportal.backend.dto.UserBookDto;
 import com.bookportal.backend.dto.UserDto;
 import com.bookportal.backend.entity.UserEntity;
@@ -84,7 +85,8 @@ class UserControllerTest {
 
         // Assertions
         assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        assertEquals(ErrorMessages.NOT_ALLOWED_ROLE.getMessage(), response.getBody());
+        assertTrue(response.getBody() instanceof MessageResponse);
+        assertEquals(ErrorMessages.NOT_ALLOWED_ROLE.getMessage(), ((MessageResponse) response.getBody()).message());
 
         // Verify service method was never called
         verify(userService, never()).deleteUserById(anyLong());
@@ -109,7 +111,8 @@ class UserControllerTest {
         ResponseEntity<?> response = controller.deleteUser(1L, auth);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
-        assertEquals(SuccessMessages.USER_DELETED.getMessage(), response.getBody());
+        assertTrue(response.getBody() instanceof MessageResponse);
+        assertEquals(SuccessMessages.USER_DELETED.getMessage(), ((MessageResponse) response.getBody()).message());
         verify(userService).deleteUserById(1L);
     }
 }

@@ -96,7 +96,7 @@ class UserControllerIntegrationTest {
         mockMvc.perform(delete("/api/user/" + regularUser.getId())
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isOk())
-                .andExpect(content().string("User deleted successfully")); // adjust to SuccessMessages.USER_DELETED.getMessage()
+                .andExpect(jsonPath("$.message").value("User deleted successfully"));
     }
 
     @Test
@@ -106,6 +106,6 @@ class UserControllerIntegrationTest {
         mockMvc.perform(delete("/api/user/" + adminUser.getId())
                         .header("Authorization", "Bearer " + token))
                 .andExpect(status().isForbidden())
-                .andExpect(content().string(ErrorMessages.NOT_ALLOWED_ROLE.getMessage()));
+                .andExpect(jsonPath("$.message").value(ErrorMessages.NOT_ALLOWED_ROLE.getMessage()));
     }
 }

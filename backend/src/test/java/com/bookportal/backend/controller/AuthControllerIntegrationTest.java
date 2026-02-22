@@ -96,7 +96,7 @@ class AuthControllerIntegrationTest {
     void register_shouldCreateUserAndReturnMessage() throws Exception {
         Map<String, String> body = Map.of(
                 "username", "int-john",
-                "password", "password",
+                "password", "Pass1!",
                 "role", "USER"
         );
 
