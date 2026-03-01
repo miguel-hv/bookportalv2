@@ -109,7 +109,7 @@ class AuthControllerIntegrationTest {
 
         // Body is a MessageResponse record: {"message":"..."}
         JsonNode json = objectMapper.readTree(result.getResponse().getContentAsString());
-        assertThat(json.get("message").asText()).isEqualTo(ErrorMessages.USER_REGISTERED.getMessage());
+        assertThat(json.get("message").asText()).isEqualTo(SuccessMessages.USER_REGISTERED.getMessage());
 
         // Verify user persisted
         assertThat(userRepository.existsByUsername("int-john")).isTrue();

@@ -114,7 +114,7 @@ public class AuthController {
 
         userRepository.save(user);
 
-        return ResponseEntity.ok(new MessageResponse(ErrorMessages.USER_REGISTERED.getMessage()));
+        return ResponseEntity.ok(new MessageResponse(SuccessMessages.USER_REGISTERED.getMessage()));
     }
 
     @PostMapping("/login")

@@ -11,6 +11,7 @@ import com.bookportal.backend.repository.UserRepository;
 import com.bookportal.backend.service.JwtService;
 import com.bookportal.backend.service.RefreshTokenService;
 import com.bookportal.backend.util.ErrorMessages;
+import com.bookportal.backend.util.SuccessMessages;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -62,7 +63,7 @@ class AuthControllerTest {
     void setUp() {
         registerRequest = new RegisterRequest();
         registerRequest.setUsername("john");
-        registerRequest.setPassword("password");
+        registerRequest.setPassword("Pass1!");
         registerRequest.setRole("USER");
 
         userRole = new RoleEntity();
@@ -73,7 +74,7 @@ class AuthControllerTest {
     void register_shouldSaveUser_whenValidRequest() {
         when(userRepository.existsByUsername("john")).thenReturn(false);
         when(roleRepository.findByName(ERole.ROLE_USER)).thenReturn(Optional.of(userRole));
-        when(passwordEncoder.encode("password")).thenReturn("encodedPassword");
+        when(passwordEncoder.encode("Pass1!")).thenReturn("encodedPassword");
 
         ResponseEntity<?> response = controller.register(registerRequest);
 
@@ -81,7 +82,7 @@ class AuthControllerTest {
         assertEquals(200, response.getStatusCodeValue());
         assertTrue(response.getBody() instanceof MessageResponse);
         MessageResponse body = (MessageResponse) response.getBody();
-        assertEquals(ErrorMessages.USER_REGISTERED.getMessage(), body.message());
+        assertEquals(SuccessMessages.USER_REGISTERED.getMessage(), body.message());
 
         verify(userRepository).save(any(UserEntity.class));
     }

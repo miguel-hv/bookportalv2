@@ -15,11 +15,9 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
-import java.util.Collection;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -65,50 +63,21 @@ class UserControllerTest {
     }
 
     @Test
-    void deleteUser_shouldReturnForbidden_whenUserIsNotAdmin() {
-        // Inline Authentication implementation for a non-admin user
-        Authentication auth = new Authentication() {
-            @Override
-            public Collection<? extends GrantedAuthority> getAuthorities() {
-                return List.of(new SimpleGrantedAuthority("ROLE_USER")); // not admin
-            }
-            @Override public Object getCredentials() { return null; }
-            @Override public Object getDetails() { return null; }
-            @Override public Object getPrincipal() { return null; }
-            @Override public boolean isAuthenticated() { return true; }
-            @Override public void setAuthenticated(boolean isAuthenticated) {}
-            @Override public String getName() { return "user"; }
-        };
+    void getUserById_shouldReturnUser() {
+        when(userService.getUserById(1L)).thenReturn(user1);
 
-        // Call the controller method
-        ResponseEntity<?> response = controller.deleteUser(1L, auth);
+        UserDto result = controller.getUserById(1L);
 
-        // Assertions
-        assertEquals(HttpStatus.FORBIDDEN, response.getStatusCode());
-        assertTrue(response.getBody() instanceof MessageResponse);
-        assertEquals(ErrorMessages.NOT_ALLOWED_ROLE.getMessage(), ((MessageResponse) response.getBody()).message());
-
-        // Verify service method was never called
-        verify(userService, never()).deleteUserById(anyLong());
+        assertNotNull(result);
+        assertEquals("john", result.getUsername());
+        verify(userService).getUserById(1L);
     }
 
     @Test
-    void deleteUser_shouldReturnSuccess_whenUserIsAdmin() {
-        Authentication auth = new Authentication() {
-            @Override public Collection<? extends GrantedAuthority> getAuthorities() {
-                return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"));
-            }
-            @Override public Object getCredentials() { return null; }
-            @Override public Object getDetails() { return null; }
-            @Override public Object getPrincipal() { return null; }
-            @Override public boolean isAuthenticated() { return true; }
-            @Override public void setAuthenticated(boolean isAuthenticated) {}
-            @Override public String getName() { return "admin"; }
-        };
-
+    void deleteUser_shouldCallService() {
         doNothing().when(userService).deleteUserById(1L);
 
-        ResponseEntity<?> response = controller.deleteUser(1L, auth);
+        ResponseEntity<?> response = controller.deleteUser(1L);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertTrue(response.getBody() instanceof MessageResponse);

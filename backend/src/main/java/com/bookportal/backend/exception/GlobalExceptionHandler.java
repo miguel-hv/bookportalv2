@@ -4,6 +4,7 @@ import com.bookportal.backend.dto.MessageResponse;
 import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
@@ -18,6 +19,13 @@ public class GlobalExceptionHandler {
     public ResponseEntity<MessageResponse> handleAuth(AuthException ex) {
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                 .body(new MessageResponse(ex.getError().getMessage()));
+    }
+
+    // 🔹 Access denied → 403
+    @ExceptionHandler(AccessDeniedException.class)
+    public ResponseEntity<MessageResponse> handleAccessDenied(AccessDeniedException ex) {
+        return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                .body(new MessageResponse(ErrorMessages.NOT_ALLOWED_ROLE.getMessage()));
     }
 
     // 🔹 Validation errors → 400

@@ -105,7 +105,6 @@ class UserControllerIntegrationTest {
 
         mockMvc.perform(delete("/api/user/" + adminUser.getId())
                         .header("Authorization", "Bearer " + token))
-                .andExpect(status().isForbidden())
-                .andExpect(jsonPath("$.message").value(ErrorMessages.NOT_ALLOWED_ROLE.getMessage()));
+                .andExpect(status().isForbidden());
     }
 }

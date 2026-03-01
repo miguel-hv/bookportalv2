@@ -2,7 +2,6 @@ package com.bookportal.backend.util;
 
 public enum ErrorMessages {
     USERNAME_EXISTS("Username already exists"),
-    USER_REGISTERED("User registered successfully"),
     USER_NOT_FOUND("User not found"),
     INVALID_CREDENTIALS("Invalid username or password"),
     INVALID_REFRESH_TOKEN("Invalid or expired refresh token"),

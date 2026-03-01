@@ -8,7 +8,7 @@ import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.Authentication;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -33,20 +33,9 @@ public class UserController {
         return service.getUserById(id);
     }
 
-    //TODO: use declarative security (see BookController)
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteUser(
-            @PathVariable Long id,
-            Authentication authentication) {
-
-        boolean isAdmin = authentication.getAuthorities().stream()
-                .anyMatch(a -> a.getAuthority().equals("ROLE_ADMIN"));
-
-        if (!isAdmin) {
-            return ResponseEntity.status(HttpStatus.FORBIDDEN)
-                    .body(new MessageResponse(ErrorMessages.NOT_ALLOWED_ROLE.getMessage()));
-        }
-
+    @PreAuthorize("@userSecurity.isOwner(#id, authentication.name) or hasRole('ADMIN')")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         service.deleteUserById(id);
         return ResponseEntity.ok(new MessageResponse(SuccessMessages.USER_DELETED.getMessage()));
     }
