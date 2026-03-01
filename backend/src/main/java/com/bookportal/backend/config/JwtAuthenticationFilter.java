@@ -8,6 +8,7 @@ import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import org.slf4j.MDC;
 import org.springframework.lang.NonNull;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -66,6 +67,10 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     UsernamePasswordAuthenticationToken authToken =
                             new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                     SecurityContextHolder.getContext().setAuthentication(authToken);
+                    
+                    MDC.put("userId", username);
+                    filterChain.doFilter(request, response);
+                    return;
                 }
             }
 
@@ -79,7 +84,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
                     new org.springframework.security.core.AuthenticationException(
                             ErrorMessages.INVALID_JWT.getMessage()) {});
         }
-        }
+    }
 }
-
 

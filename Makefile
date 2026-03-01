@@ -48,4 +48,7 @@ clean:
 
 logs:
 	@echo "Showing logs..."
-	docker compose -f docker-compose.yml logs -f || docker compose -f docker-compose.prod.yml logs -f || echo "No containers running"
+	@echo "Usage: docker compose logs [service]     # All or specific service"
+	@echo "       docker compose logs -f backend    # Follow backend logs"
+	@echo "       docker compose logs -t            # Show timestamps"
+	docker compose logs -f

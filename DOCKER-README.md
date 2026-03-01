@@ -70,6 +70,36 @@ Access your application:
 - **PostgreSQL**: Port 5432, persistent data volume
 - **Security**: Environment variables from .env.prod file
 - **Network**: Internal bridge for service communication
+- **Logging**: JSON file driver (json-file), max 50MB per file, 3 files rotation
+
+## Viewing Logs
+
+### Development
+```bash
+# All services
+docker compose logs -f
+
+# Specific service
+docker compose logs -f backend
+docker compose logs -f frontend
+```
+
+### Production
+```bash
+# Real-time logs (JSON format)
+docker compose logs -f backend
+
+# With timestamps
+docker compose logs -t backend
+
+# Filter by level (e.g., ERROR only)
+docker compose logs backend | grep ERROR
+
+# View specific container
+docker logs -f bookportalv2-backend-1
+```
+
+**Note**: Production uses structured JSON logging. Logs can be parsed by log aggregation tools (Elasticsearch, Splunk, Datadog).
 
 ## Environment Variables
 
@@ -123,16 +153,13 @@ Docker development automatically seeds test data on startup. See [DOCKER_DEV_SEE
 # View logs
 docker compose logs -f frontend
 docker compose logs -f backend
+docker logs -f <container_name>    # For a specific container
 
-# Execute commands in containers
-docker compose exec frontend npm test
-docker compose exec backend ./mvnw test
+# View logs with timestamps
+docker compose logs -t backend
 
-# Rebuild specific service
-docker compose up --build frontend
-
-# Clean up
-docker compose down --volumes --remove-orphans
+# Follow only errors
+docker compose logs backend | grep ERROR
 ```
 
 ## Troubleshooting

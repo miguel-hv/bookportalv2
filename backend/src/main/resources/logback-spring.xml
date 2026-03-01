@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+    <property name="LOG_PATH" value="logs"/>
+    <property name="APP_NAME" value="bookportal"/>
+
+    <!-- Dev Console Appender: Human-readable colored output -->
+    <appender name="CONSOLE" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %highlight(%-5level) %cyan(%logger{36}) %magenta(%X{traceId:- -}) %yellow(%X{userId:- -}) - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!-- JSON File Appender: Structured logging for production -->
+    <appender name="JSON_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/${APP_NAME}.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/${APP_NAME}-%d{yyyy-MM-dd}.%i.json</fileNamePattern>
+            <maxFileSize>50MB</maxFileSize>
+            <maxHistory>7</maxHistory>
+            <totalSizeCap>1GB</totalSizeCap>
+        </rollingPolicy>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <customFields>{"service_name":"${APP_NAME}"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- Async Appender for performance -->
+    <appender name="ASYNC_JSON" class="ch.qos.logback.classic.AsyncAppender">
+        <queueSize>512</queueSize>
+        <discardingThreshold>0</discardingThreshold>
+        <appender-ref ref="JSON_FILE"/>
+    </appender>
+
+    <!-- Spring Profile: dev -->
+    <springProfile name="dev">
+        <root level="INFO">
+            <appender-ref ref="CONSOLE"/>
+        </root>
+        <logger name="com.bookportal.backend" level="DEBUG"/>
+    </springProfile>
+
+    <!-- Spring Profile: prod -->
+    <springProfile name="prod">
+        <root level="INFO">
+            <appender-ref ref="ASYNC_JSON"/>
+        </root>
+        <logger name="com.bookportal.backend" level="INFO"/>
+    </springProfile>
+
+    <!-- Default fallback -->
+    <root level="INFO">
+        <appender-ref ref="CONSOLE"/>
+    </root>
+</configuration>

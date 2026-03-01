@@ -9,6 +9,11 @@ services:
       - "80:80"
     environment:
       - VITE_API_URL=http://backend:8080/api
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
     depends_on:
       - backend
     networks:
@@ -25,6 +30,11 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=prod
       - FRONTEND_URL=http://frontend
+    logging:
+      driver: json-file
+      options:
+        max-size: "50m"
+        max-file: "3"
     depends_on:
       - postgres
     networks:

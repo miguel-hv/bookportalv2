@@ -20,6 +20,8 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.ResponseCookie;
@@ -39,6 +41,8 @@ import java.util.Set;
 @RestController
 @RequestMapping("/api/auth")
 public class AuthController {
+
+    private static final Logger log = LoggerFactory.getLogger(AuthController.class);
 
 
     private final AuthenticationManager authenticationManager;
@@ -79,6 +83,7 @@ public class AuthController {
     @PostMapping("/register")
     public ResponseEntity<?> register(@Valid @RequestBody RegisterRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
+            log.warn("Registration failed - username already exists: {}", request.getUsername());
             throw new ValidationException(ErrorMessages.USERNAME_EXISTS.getMessage());
         }
 
@@ -93,6 +98,7 @@ public class AuthController {
         try {
             eRole = ERole.valueOf(normalizedRole);
         } catch (IllegalArgumentException ex) {
+            log.warn("Registration failed - invalid role: {}", request.getRole());
             throw new ValidationException("Invalid role: " + request.getRole());
         }
 
@@ -114,6 +120,7 @@ public class AuthController {
 
         userRepository.save(user);
 
+        log.info("User registered successfully: {} with role: {}", request.getUsername(), normalizedRole);
         return ResponseEntity.ok(new MessageResponse(SuccessMessages.USER_REGISTERED.getMessage()));
     }
 
@@ -124,6 +131,7 @@ public class AuthController {
                     new UsernamePasswordAuthenticationToken(request.getUsername(), request.getPassword())
             );
         } catch (Exception e) {
+            log.warn("Login failed - invalid credentials for user: {}", request.getUsername());
             throw new AuthException(ErrorMessages.INVALID_CREDENTIALS);
         }
 
@@ -131,6 +139,8 @@ public class AuthController {
         String token = jwtService.generateToken(user);
         RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(user);
         var userResponse = UserMapper.toDto(user);
+
+        log.info("User logged in successfully: {}", request.getUsername());
 
         ResponseCookie refreshCookie = ResponseCookie.from("refreshToken", refreshToken.getToken())
                 .httpOnly(true)

@@ -7,6 +7,8 @@ import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -20,6 +22,7 @@ import java.util.List;
 @Tag(name = "Books", description = "Operations related to books")
 public class BookController {
 
+    private static final Logger log = LoggerFactory.getLogger(BookController.class);
     private final BookService bookService;
 
     public BookController(BookService bookService) {
@@ -30,24 +33,30 @@ public class BookController {
     @Operation(summary = "Add new book")
     @PostMapping("/user/{userId}/book")
     public BookDto addBookToUser(@PathVariable Long userId, @RequestBody BookCreateRequest request) {
-        return bookService.addBookToUser(userId, request);
+        log.debug("Adding book to user: {} - title: {}", userId, request.getTitle());
+        BookDto result = bookService.addBookToUser(userId, request);
+        log.info("Book added successfully - bookId: {} userId: {}", result.getId(), userId);
+        return result;
     }
 
     @Operation(summary = "Get all user books")
     @GetMapping("/user/{userId}/books")
     public List<BookDto> getUserBooks (@PathVariable Long userId) {
+        log.debug("Fetching books for user: {}", userId);
         return bookService.getUserBooks(userId);
     }
 
     @Operation(summary = "Get all books from all users")
     @GetMapping("/books")
     public List<BookUserDto> getAllBooks() {
+        log.debug("Fetching all books");
         return bookService.getAllBooks();
     }
 
     @Operation(summary = "Get book by id")
     @GetMapping("/books/{id}")
     public BookDto getBook(@PathVariable Long id) {
+        log.debug("Fetching book: {}", id);
         return bookService.getBookById(id);
     }
 
@@ -55,9 +64,11 @@ public class BookController {
     @PatchMapping("/books/{id}")
     @PreAuthorize("@bookSecurity.isOwner(#id, authentication.name)")
     public ResponseEntity<?> editBook(@PathVariable Long id, @RequestBody BookPatchRequest request) {
+        log.debug("Updating book: {}", id);
         BookEntity book = bookService.findEntityById(id);
-
-        return ResponseEntity.ok(bookService.updateBookById(id, request));
+        BookDto result = bookService.updateBookById(id, request);
+        log.info("Book updated successfully - bookId: {}", id);
+        return ResponseEntity.ok(result);
 
     }
 
@@ -67,6 +78,7 @@ public class BookController {
             "@bookSecurity.isOwner(#id, authentication.name) or hasRole('ADMIN')"
     )
     public ResponseEntity<?>  deleteBook(@PathVariable Long id, Authentication authentication) {
+        log.info("Deleting book: {} by user: {}", id, authentication.getName());
         bookService.deleteBook(id);
 
         return ResponseEntity.ok(
