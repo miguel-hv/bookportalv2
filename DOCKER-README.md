@@ -10,6 +10,7 @@ make dev-local
 Access your application:
 - **Frontend**: http://localhost:5173 (Vite dev server)
 - **Backend API**: http://localhost:8080/api
+- **Backend SWAGGER**: http://localhost:8080/swagger-ui/index.html
 - **H2 Console**: http://localhost:8080/h2-console
 
 ### Docker Development (with hot-reloading)
@@ -20,6 +21,7 @@ make dev-docker
 Access your application:
 - **Frontend**: http://localhost:5173 (Vite dev server with hot-reload)
 - **Backend API**: http://localhost:8080/api
+- **Backend SWAGGER**: http://localhost:8080/swagger-ui/index.html
 - **PostgreSQL**: localhost:5432 (bookportal/bookportal)
 - **H2 Console**: Not available in Docker environments
 
@@ -35,6 +37,7 @@ make prod-docker
 Access your application:
 - **Frontend**: http://localhost:80 (nginx serving production build)
 - **Backend API**: http://localhost:8080/api
+- **Backend SWAGGER**: http://localhost:8080/swagger-ui/index.html
 - **PostgreSQL**: localhost:5432 (credentials from .env.prod)
 
 ## Architecture
