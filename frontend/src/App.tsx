@@ -24,7 +24,7 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route element={<Layout />}>
-          <Route path="/" element={<Navigate to="/users" replace />} />
+          <Route path="/" element={<Navigate to="/login" replace />} />
           <Route path="/users" element={
             <AuthGuard>
               <UserList />
