@@ -5,7 +5,7 @@ help:
 	@echo "Available commands:"
 	@echo "  dev-local          - Start frontend and backend locally"
 	@echo "  dev-docker         - Start development containers"
-	@echo "  dev-docker-monitor - Start development + ELK monitoring stack"
+	@echo "  dev-docker-monitor - Start development + Loki/Grafana monitoring"
 	@echo "  prod-docker        - Start production containers"
 	@echo "  stop               - Stop all containers"
 	@echo "  clean              - Clean up containers and images"
@@ -28,13 +28,13 @@ dev-docker:
 	@echo "H2 Console: http://localhost:8080/h2-console"
 	docker compose -f docker-compose.yml up --build
 
-# Docker development with monitoring (ELK stack)
+# Docker development with monitoring (Loki + Grafana)
 dev-docker-monitor:
 	@echo "Starting Docker development with monitoring..."
 	@echo "Frontend:    http://localhost:5173"
 	@echo "Backend:     http://localhost:8080"
-	@echo "Kibana:      http://localhost:5601"
-	@echo "Elasticsearch: http://localhost:9200"
+	@echo "Grafana:     http://localhost:3001"
+	@echo "Loki:        http://localhost:3100"
 	docker compose -f docker-compose.yml -f docker-compose.monitoring.yml up --build
 
 # Docker production

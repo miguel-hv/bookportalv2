@@ -127,7 +127,7 @@ docker logs -f bookportalv2-backend-1
 2. **Start services**: `docker compose -f docker-compose.prod.yml up -d`
 3. **Stop services**: `docker compose -f docker-compose.prod.yml down`
 
-## Monitoring Stack (ELK)
+## Monitoring Stack (Loki + Grafana)
 
 Start monitoring services alongside any other stack:
 
@@ -141,21 +141,26 @@ docker compose -f docker-compose.prod.yml -f docker-compose.monitoring.yml up -d
 
 ### Access
 
-- **Kibana**: http://localhost:5601
-- **Elasticsearch**: http://localhost:9200
+- **Grafana**: http://localhost:3001 (admin/admin)
+- **Loki**: http://localhost:3100
 
-### Kibana Setup
+### Grafana Setup
 
-1. Go to http://localhost:5601
-2. Go to **Stack Management** → **Index Patterns**
-3. Create index pattern: `bookportal-logs-*`
-4. Set **Time field** to `@timestamp`
+1. Go to http://localhost:3001
+2. Login with **admin/admin**
+3. Go to **Explore** (compass icon in sidebar)
+4. Select **Loki** from the dropdown
+5. Use LogQL queries to search logs, e.g.:
+   - `{job="bookportal"}` - all bookportal logs
+   - `{service="backend"}` - backend service logs
+   - `|= "ERROR"` - filter for ERROR level
 
 ### View Logs
 
-1. In Kibana, go to **Discover**
-2. Select `bookportal-logs-*` index pattern
-3. Search and filter logs
+1. In Grafana, go to **Explore**
+2. Select **Loki** as data source
+3. Enter a LogQL query (e.g., `{job="bookportal"}`)
+4. Click **Run query** to see results
 
 ### Stop Monitoring
 
