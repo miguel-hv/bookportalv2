@@ -127,6 +127,42 @@ docker logs -f bookportalv2-backend-1
 2. **Start services**: `docker compose -f docker-compose.prod.yml up -d`
 3. **Stop services**: `docker compose -f docker-compose.prod.yml down`
 
+## Monitoring Stack (ELK)
+
+Start monitoring services alongside any other stack:
+
+```bash
+# Start base stack + monitoring
+docker compose -f docker-compose.yml -f docker-compose.monitoring.yml up -d
+
+# Or with production
+docker compose -f docker-compose.prod.yml -f docker-compose.monitoring.yml up -d
+```
+
+### Access
+
+- **Kibana**: http://localhost:5601
+- **Elasticsearch**: http://localhost:9200
+
+### Kibana Setup
+
+1. Go to http://localhost:5601
+2. Go to **Stack Management** → **Index Patterns**
+3. Create index pattern: `bookportal-logs-*`
+4. Set **Time field** to `@timestamp`
+
+### View Logs
+
+1. In Kibana, go to **Discover**
+2. Select `bookportal-logs-*` index pattern
+3. Search and filter logs
+
+### Stop Monitoring
+
+```bash
+docker compose -f docker-compose.monitoring.yml down
+```
+
 ## Makefile Commands
 
 ```bash

@@ -27,6 +27,7 @@ services:
       - ./backend:/app
       - /app/.mvn
       - /app/target
+      - app-logs:/app/logs
     environment:
       - SPRING_PROFILES_ACTIVE=dev
       - FRONTEND_URL=http://frontend:5173
@@ -51,3 +52,7 @@ services:
 networks:
   app-network:
     driver: bridge
+
+volumes:
+  app-logs:
+    driver: local

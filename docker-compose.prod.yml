@@ -37,6 +37,8 @@ services:
         max-file: "3"
     depends_on:
       - postgres
+    volumes:
+      - app-logs:/app/logs
     networks:
       - app-network
 
@@ -57,6 +59,8 @@ services:
 
 volumes:
   postgres_data:
+    driver: local
+  app-logs:
     driver: local
 
 networks:
