@@ -16,4 +16,4 @@ scrape_configs:
         labels:
           job: bookportal
           service: backend
-          __path__: /var/log/bookportal/*.log
+          __path__: /var/log/bookportal/*.json

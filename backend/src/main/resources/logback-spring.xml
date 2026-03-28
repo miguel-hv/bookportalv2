@@ -35,6 +35,7 @@
     <springProfile name="dev">
         <root level="INFO">
             <appender-ref ref="CONSOLE"/>
+            <appender-ref ref="JSON_FILE"/>
         </root>
         <logger name="com.bookportal.backend" level="DEBUG"/>
     </springProfile>

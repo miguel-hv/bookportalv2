@@ -30,7 +30,7 @@ services:
     image: grafana/promtail:2.9.0
     volumes:
       - ./promtail/promtail-config.yml:/etc/promtail/config.yml:ro
-      - app-logs:/var/log/bookportal:ro
+      - app-logs:/var/log/bookportal
     depends_on:
       - loki
     networks:
