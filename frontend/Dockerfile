@@ -25,7 +25,11 @@ RUN npm run build
 # Production stage
 # ------------------------------
 FROM nginx:alpine AS prod
+RUN addgroup -g 1000 appgroup && \
+    adduser -u 1000 -G appgroup -s /bin/false -D appuser
 COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/nginx.conf
+RUN chown -R appuser:appgroup /usr/share/nginx
+USER appuser
 EXPOSE 80
 CMD ["nginx", "-g", "daemon off;"]

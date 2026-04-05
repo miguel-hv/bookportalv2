@@ -22,6 +22,10 @@ RUN ./mvnw clean package -DskipTests
 # ------------------------------
 FROM eclipse-temurin:17-jdk AS prod
 WORKDIR /app
+RUN groupadd -g 1000 appgroup && \
+    useradd -r -u 1000 -g appgroup -s /bin/false appuser
 COPY --from=build /app/target/*.jar app.jar
+RUN chown -R appuser:appgroup /app
+USER appuser
 EXPOSE 8080
 ENTRYPOINT ["java","-jar","app.jar"]
