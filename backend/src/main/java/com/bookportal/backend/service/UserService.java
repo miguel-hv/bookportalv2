@@ -3,8 +3,8 @@ package com.bookportal.backend.service;
 import com.bookportal.backend.dto.UserBookDto;
 import com.bookportal.backend.dto.UserDto;
 import com.bookportal.backend.exception.ResourceNotFoundException;
-import com.bookportal.backend.mapper.UserMapper;
-import com.bookportal.backend.repository.UserRepository;
+import com.bookportal.backend.application.mapper.UserMapper;
+import com.bookportal.backend.infrastructure.repository.UserRepository;
 import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.stereotype.Service;
 

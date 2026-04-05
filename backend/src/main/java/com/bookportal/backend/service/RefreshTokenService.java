@@ -1,8 +1,8 @@
 package com.bookportal.backend.service;
 
-import com.bookportal.backend.entity.RefreshTokenEntity;
-import com.bookportal.backend.entity.UserEntity;
-import com.bookportal.backend.repository.RefreshTokenRepository;
+import com.bookportal.backend.domain.model.RefreshTokenEntity;
+import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
 import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;

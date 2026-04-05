@@ -1,9 +1,10 @@
 package com.bookportal.backend.repository;
 
-import com.bookportal.backend.entity.RefreshTokenEntity;
-import com.bookportal.backend.entity.RoleEntity;
-import com.bookportal.backend.entity.UserEntity;
-import com.bookportal.backend.entity.enums.ERole;
+import com.bookportal.backend.domain.model.RefreshTokenEntity;
+import com.bookportal.backend.domain.model.RoleEntity;
+import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.enums.ERole;
+import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;

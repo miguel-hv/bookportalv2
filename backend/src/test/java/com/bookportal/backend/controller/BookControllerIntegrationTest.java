@@ -1,13 +1,13 @@
 package com.bookportal.backend.controller;
 
-import com.bookportal.backend.entity.BookEntity;
-import com.bookportal.backend.entity.RoleEntity;
-import com.bookportal.backend.entity.UserEntity;
-import com.bookportal.backend.entity.enums.ERole;
-import com.bookportal.backend.repository.BookRepository;
-import com.bookportal.backend.repository.RefreshTokenRepository;
-import com.bookportal.backend.repository.RoleRepository;
-import com.bookportal.backend.repository.UserRepository;
+import com.bookportal.backend.domain.model.BookEntity;
+import com.bookportal.backend.domain.model.RoleEntity;
+import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.enums.ERole;
+import com.bookportal.backend.infrastructure.repository.BookRepository;
+import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
+import com.bookportal.backend.infrastructure.repository.RoleRepository;
+import com.bookportal.backend.infrastructure.repository.UserRepository;
 import com.bookportal.backend.service.JwtService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.jsonwebtoken.SignatureAlgorithm;

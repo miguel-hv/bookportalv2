@@ -1,8 +1,9 @@
-package com.bookportal.backend.mapper;
+package com.bookportal.backend.application.mapper;
 
+import com.bookportal.backend.application.mapper.BookMapper;
 import com.bookportal.backend.dto.UserBookDto;
 import com.bookportal.backend.dto.UserDto;
-import com.bookportal.backend.entity.UserEntity;
+import com.bookportal.backend.domain.model.UserEntity;
 
 import java.util.stream.Collectors;
 

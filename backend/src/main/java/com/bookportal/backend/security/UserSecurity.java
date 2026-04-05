@@ -1,6 +1,6 @@
 package com.bookportal.backend.security;
 
-import com.bookportal.backend.repository.UserRepository;
+import com.bookportal.backend.infrastructure.repository.UserRepository;
 import org.springframework.stereotype.Component;
 
 @Component("userSecurity")

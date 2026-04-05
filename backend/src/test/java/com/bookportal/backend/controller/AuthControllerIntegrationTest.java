@@ -1,13 +1,13 @@
 package com.bookportal.backend.controller;
 
 import com.bookportal.backend.dto.MessageResponse;
-import com.bookportal.backend.entity.RefreshTokenEntity;
-import com.bookportal.backend.entity.RoleEntity;
-import com.bookportal.backend.entity.UserEntity;
-import com.bookportal.backend.entity.enums.ERole;
-import com.bookportal.backend.repository.RefreshTokenRepository;
-import com.bookportal.backend.repository.RoleRepository;
-import com.bookportal.backend.repository.UserRepository;
+import com.bookportal.backend.domain.model.RefreshTokenEntity;
+import com.bookportal.backend.domain.model.RoleEntity;
+import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.enums.ERole;
+import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
+import com.bookportal.backend.infrastructure.repository.RoleRepository;
+import com.bookportal.backend.infrastructure.repository.UserRepository;
 import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;
 import com.fasterxml.jackson.databind.JsonNode;

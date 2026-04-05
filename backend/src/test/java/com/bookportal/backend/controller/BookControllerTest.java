@@ -5,7 +5,7 @@ import com.bookportal.backend.dto.BookDto;
 import com.bookportal.backend.dto.BookPatchRequest;
 import com.bookportal.backend.dto.BookUserDto;
 import com.bookportal.backend.dto.MessageResponse;
-import com.bookportal.backend.entity.BookEntity;
+import com.bookportal.backend.domain.model.BookEntity;
 import com.bookportal.backend.service.BookService;
 import com.bookportal.backend.util.SuccessMessages;
 import org.junit.jupiter.api.BeforeEach;

@@ -1,6 +1,6 @@
 package com.bookportal.backend.service;
 
-import com.bookportal.backend.entity.UserEntity;
+import com.bookportal.backend.domain.model.UserEntity;
 import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
-import com.bookportal.backend.repository.UserRepository;
+import com.bookportal.backend.infrastructure.repository.UserRepository;
 
 import java.util.Set;
 import java.util.stream.Collectors;

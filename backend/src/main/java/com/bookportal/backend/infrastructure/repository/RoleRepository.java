@@ -1,7 +1,7 @@
-package com.bookportal.backend.repository;
+package com.bookportal.backend.infrastructure.repository;
 
-import com.bookportal.backend.entity.enums.ERole;
-import com.bookportal.backend.entity.RoleEntity;
+import com.bookportal.backend.domain.model.enums.ERole;
+import com.bookportal.backend.domain.model.RoleEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.Optional;

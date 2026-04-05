@@ -1,4 +1,4 @@
-package com.bookportal.backend.entity;
+package com.bookportal.backend.domain.model;
 
 import com.bookportal.backend.util.ErrorMessages;
 import jakarta.persistence.*;

@@ -1,6 +1,6 @@
 package com.bookportal.backend.security;
 
-import com.bookportal.backend.repository.BookRepository;
+import com.bookportal.backend.infrastructure.repository.BookRepository;
 import org.springframework.stereotype.Component;
 
 @Component("bookSecurity")

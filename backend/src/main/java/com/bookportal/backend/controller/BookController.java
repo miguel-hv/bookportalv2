@@ -1,7 +1,7 @@
 package com.bookportal.backend.controller;
 
 import com.bookportal.backend.dto.*;
-import com.bookportal.backend.entity.BookEntity;
+import com.bookportal.backend.domain.model.BookEntity;
 import com.bookportal.backend.service.BookService;
 import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;

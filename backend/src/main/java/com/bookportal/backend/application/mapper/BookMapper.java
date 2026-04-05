@@ -1,9 +1,9 @@
-package com.bookportal.backend.mapper;
+package com.bookportal.backend.application.mapper;
 
 import com.bookportal.backend.dto.BookCreateRequest;
 import com.bookportal.backend.dto.BookDto;
 import com.bookportal.backend.dto.BookUserDto;
-import com.bookportal.backend.entity.BookEntity;
+import com.bookportal.backend.domain.model.BookEntity;
 
 public class BookMapper {
 

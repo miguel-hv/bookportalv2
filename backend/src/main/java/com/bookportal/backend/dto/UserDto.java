@@ -1,6 +1,5 @@
 package com.bookportal.backend.dto;
 
-import com.bookportal.backend.entity.RoleEntity;
 import io.swagger.v3.oas.annotations.Hidden;
 
 import java.util.Set;

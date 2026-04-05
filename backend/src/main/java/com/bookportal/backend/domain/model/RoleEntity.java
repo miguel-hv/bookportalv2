@@ -1,6 +1,6 @@
-package com.bookportal.backend.entity;
+package com.bookportal.backend.domain.model;
 
-import com.bookportal.backend.entity.enums.ERole;
+import com.bookportal.backend.domain.model.enums.ERole;
 import jakarta.persistence.*;
 
 @Entity

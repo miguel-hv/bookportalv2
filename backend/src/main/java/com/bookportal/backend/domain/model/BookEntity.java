@@ -1,4 +1,4 @@
-package com.bookportal.backend.entity;
+package com.bookportal.backend.domain.model;
 
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;

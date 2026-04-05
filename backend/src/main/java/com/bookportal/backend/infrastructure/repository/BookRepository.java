@@ -1,6 +1,6 @@
-package com.bookportal.backend.repository;
+package com.bookportal.backend.infrastructure.repository;
 
-import com.bookportal.backend.entity.BookEntity;
+import com.bookportal.backend.domain.model.BookEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

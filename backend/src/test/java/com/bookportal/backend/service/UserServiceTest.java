@@ -2,8 +2,8 @@ package com.bookportal.backend.service;
 
 import com.bookportal.backend.dto.UserBookDto;
 import com.bookportal.backend.dto.UserDto;
-import com.bookportal.backend.entity.UserEntity;
-import com.bookportal.backend.repository.UserRepository;
+import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.infrastructure.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
