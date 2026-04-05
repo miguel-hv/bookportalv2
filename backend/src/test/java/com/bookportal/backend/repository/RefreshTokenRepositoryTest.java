@@ -1,8 +1,8 @@
 package com.bookportal.backend.repository;
 
-import com.bookportal.backend.domain.model.RefreshTokenEntity;
-import com.bookportal.backend.domain.model.RoleEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.RefreshToken;
+import com.bookportal.backend.domain.model.Role;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
 import org.junit.jupiter.api.Test;
@@ -25,15 +25,15 @@ class RefreshTokenRepositoryTest {
     @Autowired
     private TestEntityManager entityManager;
 
-    private UserEntity createUserWithRole() {
-        RoleEntity role = new RoleEntity();
+    private User createUserWithRole() {
+        Role role = new Role();
         role.setName(ERole.ROLE_USER);
         entityManager.persist(role);
 
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUsername("testuser");
         user.setPassword("password123");
-        user.setRoles(Set.of(role));  // REQUIRED by your UserEntity validation
+        user.setRoles(Set.of(role));  // REQUIRED by your User validation
 
         entityManager.persist(user);
         entityManager.flush();
@@ -42,9 +42,9 @@ class RefreshTokenRepositoryTest {
 
     @Test
     void findByToken_shouldReturnRefreshToken() {
-        UserEntity user = createUserWithRole();
+        User user = createUserWithRole();
 
-        RefreshTokenEntity token = new RefreshTokenEntity();
+        RefreshToken token = new RefreshToken();
         token.setUser(user);
         token.setToken(UUID.randomUUID().toString());
         token.setExpiryDate(Instant.now().plusSeconds(60));
@@ -60,9 +60,9 @@ class RefreshTokenRepositoryTest {
 
     @Test
     void deleteByUser_shouldRemoveTokensForThatUser() {
-        UserEntity user = createUserWithRole();
+        User user = createUserWithRole();
 
-        RefreshTokenEntity token = new RefreshTokenEntity();
+        RefreshToken token = new RefreshToken();
         token.setUser(user);
         token.setToken(UUID.randomUUID().toString());
         token.setExpiryDate(Instant.now().plusSeconds(60));

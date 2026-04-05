@@ -1,6 +1,6 @@
 package com.bookportal.backend.config;
 
-import com.bookportal.backend.domain.model.RoleEntity;
+import com.bookportal.backend.domain.model.Role;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.infrastructure.repository.RoleRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,8 +16,8 @@ public class RoleSeeder implements CommandLineRunner {
     @Override
     public void run(String... args) {
         if (roleRepository.count() == 0) {
-            roleRepository.save(new RoleEntity(ERole.ROLE_USER));
-            roleRepository.save(new RoleEntity(ERole.ROLE_ADMIN));
+            roleRepository.save(new Role(ERole.ROLE_USER));
+            roleRepository.save(new Role(ERole.ROLE_ADMIN));
         }
     }
 }

@@ -1,8 +1,8 @@
 package com.bookportal.backend.controller;
 
-import com.bookportal.backend.domain.model.BookEntity;
-import com.bookportal.backend.domain.model.RoleEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.Book;
+import com.bookportal.backend.domain.model.Role;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.infrastructure.repository.BookRepository;
 import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
@@ -60,8 +60,8 @@ class BookControllerIntegrationTest {
 
     private final ObjectMapper objectMapper = new ObjectMapper();
 
-    private UserEntity ownerUser;
-    private UserEntity otherUser;
+    private User ownerUser;
+    private User otherUser;
     private String ownerToken;
     private String otherUserToken;
 
@@ -84,26 +84,26 @@ class BookControllerIntegrationTest {
         userRepository.deleteAll();
         roleRepository.deleteAll();
 
-        RoleEntity userRole = new RoleEntity();
+        Role userRole = new Role();
         userRole.setName(ERole.ROLE_USER);
         roleRepository.save(userRole);
 
-        RoleEntity adminRole = new RoleEntity();
+        Role adminRole = new Role();
         adminRole.setName(ERole.ROLE_ADMIN);
         roleRepository.save(adminRole);
 
-        ownerUser = new UserEntity();
+        ownerUser = new User();
         ownerUser.setUsername("owner");
         ownerUser.setPassword(passwordEncoder.encode("Pass1!"));
-        Set<RoleEntity> ownerRoles = new HashSet<>();
+        Set<Role> ownerRoles = new HashSet<>();
         ownerRoles.add(userRole);
         ownerUser.setRoles(ownerRoles);
         userRepository.save(ownerUser);
 
-        otherUser = new UserEntity();
+        otherUser = new User();
         otherUser.setUsername("other");
         otherUser.setPassword(passwordEncoder.encode("Pass1!"));
-        Set<RoleEntity> otherRoles = new HashSet<>();
+        Set<Role> otherRoles = new HashSet<>();
         otherRoles.add(userRole);
         otherUser.setRoles(otherRoles);
         userRepository.save(otherUser);
@@ -133,7 +133,7 @@ class BookControllerIntegrationTest {
 
     @Test
     void getUserBooks_shouldReturnUserBooks() throws Exception {
-        BookEntity book = new BookEntity();
+        Book book = new Book();
         book.setTitle("My Book");
         book.setAuthor("Me");
         book.setUser(ownerUser);
@@ -147,7 +147,7 @@ class BookControllerIntegrationTest {
 
     @Test
     void getAllBooks_shouldReturnAllBooks() throws Exception {
-        BookEntity book = new BookEntity();
+        Book book = new Book();
         book.setTitle("Book 1");
         book.setAuthor("Author 1");
         book.setUser(ownerUser);
@@ -162,7 +162,7 @@ class BookControllerIntegrationTest {
 
     @Test
     void getBook_shouldReturnBook() throws Exception {
-        BookEntity book = new BookEntity();
+        Book book = new Book();
         book.setTitle("Test Book");
         book.setAuthor("Author");
         book.setUser(ownerUser);
@@ -176,7 +176,7 @@ class BookControllerIntegrationTest {
 
     @Test
     void editBook_shouldUpdateBook() throws Exception {
-        BookEntity book = new BookEntity();
+        Book book = new Book();
         book.setTitle("Original Title");
         book.setAuthor("Original Author");
         book.setUser(ownerUser);
@@ -196,7 +196,7 @@ class BookControllerIntegrationTest {
 
     @Test
     void deleteBook_shouldDeleteBook() throws Exception {
-        BookEntity book = new BookEntity();
+        Book book = new Book();
         book.setTitle("To Delete");
         book.setAuthor("Author");
         book.setUser(ownerUser);
@@ -213,7 +213,7 @@ class BookControllerIntegrationTest {
 
     @Test
     void deleteBook_shouldRejectNonOwner() throws Exception {
-        BookEntity book = new BookEntity();
+        Book book = new Book();
         book.setTitle("Owner Book");
         book.setAuthor("Owner");
         book.setUser(ownerUser);

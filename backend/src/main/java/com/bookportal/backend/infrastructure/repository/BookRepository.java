@@ -1,10 +1,10 @@
 package com.bookportal.backend.infrastructure.repository;
 
-import com.bookportal.backend.domain.model.BookEntity;
+import com.bookportal.backend.domain.model.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
 
-public interface BookRepository extends JpaRepository<BookEntity, Long> {
-    List<BookEntity> findByUserId(Long userId);
+public interface BookRepository extends JpaRepository<Book, Long> {
+    List<Book> findByUserId(Long userId);
 }

@@ -1,7 +1,7 @@
 package com.bookportal.backend.controller;
 
-import com.bookportal.backend.domain.model.RoleEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.Role;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.infrastructure.repository.RoleRepository;
 import com.bookportal.backend.infrastructure.repository.UserRepository;
@@ -42,37 +42,37 @@ class UserControllerIntegrationTest {
     @Autowired
     private JwtService jwtService;
 
-    private UserEntity adminUser;
-    private UserEntity regularUser;
+    private User adminUser;
+    private User regularUser;
 
     @BeforeEach
     void setUp() {
         userRepository.deleteAll();
         roleRepository.deleteAll();
 
-        RoleEntity roleUser = new RoleEntity();
+        Role roleUser = new Role();
         roleUser.setName(ERole.ROLE_USER);
-        RoleEntity roleAdmin = new RoleEntity();
+        Role roleAdmin = new Role();
         roleAdmin.setName(ERole.ROLE_ADMIN);
 
         roleRepository.save(roleUser);
         roleRepository.save(roleAdmin);
 
         // Admin user
-        adminUser = new UserEntity();
+        adminUser = new User();
         adminUser.setUsername("admin");
         adminUser.setPassword(passwordEncoder.encode("password"));
-        Set<RoleEntity> adminRoles = new HashSet<>();
+        Set<Role> adminRoles = new HashSet<>();
         adminRoles.add(roleAdmin);
         adminRoles.add(roleUser);
         adminUser.setRoles(adminRoles);
         userRepository.save(adminUser);
 
         // Regular user
-        regularUser = new UserEntity();
+        regularUser = new User();
         regularUser.setUsername("john");
         regularUser.setPassword(passwordEncoder.encode("password"));
-        Set<RoleEntity> userRoles = new HashSet<>();
+        Set<Role> userRoles = new HashSet<>();
         userRoles.add(roleUser);
         regularUser.setRoles(userRoles);
         userRepository.save(regularUser);

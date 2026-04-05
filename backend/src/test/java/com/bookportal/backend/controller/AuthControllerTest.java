@@ -1,8 +1,8 @@
 package com.bookportal.backend.controller;
 
 import com.bookportal.backend.dto.MessageResponse;
-import com.bookportal.backend.domain.model.RoleEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.Role;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.exception.ValidationException;
 import com.bookportal.backend.model.RegisterRequest;
@@ -57,7 +57,7 @@ class AuthControllerTest {
 
     private RegisterRequest registerRequest;
 
-    private RoleEntity userRole;
+    private Role userRole;
 
     @BeforeEach
     void setUp() {
@@ -66,7 +66,7 @@ class AuthControllerTest {
         registerRequest.setPassword("Pass1!");
         registerRequest.setRole("USER");
 
-        userRole = new RoleEntity();
+        userRole = new Role();
         userRole.setName(ERole.ROLE_USER);
     }
 
@@ -84,7 +84,7 @@ class AuthControllerTest {
         MessageResponse body = (MessageResponse) response.getBody();
         assertEquals(SuccessMessages.USER_REGISTERED.getMessage(), body.message());
 
-        verify(userRepository).save(any(UserEntity.class));
+        verify(userRepository).save(any(User.class));
     }
 
     @Test

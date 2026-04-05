@@ -4,8 +4,8 @@ import com.bookportal.backend.dto.BookCreateRequest;
 import com.bookportal.backend.dto.BookDto;
 import com.bookportal.backend.dto.BookPatchRequest;
 import com.bookportal.backend.dto.BookUserDto;
-import com.bookportal.backend.domain.model.BookEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.Book;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.exception.ResourceNotFoundException;
 import com.bookportal.backend.application.mapper.BookMapper;
 import com.bookportal.backend.infrastructure.repository.BookRepository;
@@ -37,15 +37,15 @@ class BookServiceTest {
     @InjectMocks
     private BookService bookService;
 
-    private UserEntity user;
-    private BookEntity book;
+    private User user;
+    private Book book;
 
     @BeforeEach
     void setUp() {
-        user = new UserEntity();
+        user = new User();
         user.setUsername("john");
 
-        book = new BookEntity();
+        book = new Book();
         book.setTitle("Test Book");
         book.setAuthor("Test Author");
         book.setReview("Great book!");
@@ -60,8 +60,8 @@ class BookServiceTest {
         request.setReview("Review");
 
         when(userRepository.findById(1L)).thenReturn(Optional.of(user));
-        when(bookRepository.save(any(BookEntity.class))).thenAnswer(invocation -> {
-            BookEntity saved = invocation.getArgument(0);
+        when(bookRepository.save(any(Book.class))).thenAnswer(invocation -> {
+            Book saved = invocation.getArgument(0);
             return saved;
         });
 
@@ -70,7 +70,7 @@ class BookServiceTest {
         assertNotNull(result);
         assertEquals("New Book", result.getTitle());
         assertEquals("Author", result.getAuthor());
-        verify(bookRepository).save(any(BookEntity.class));
+        verify(bookRepository).save(any(Book.class));
     }
 
     @Test
@@ -135,7 +135,7 @@ class BookServiceTest {
     void findEntityById_shouldReturnEntity() {
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
 
-        BookEntity result = bookService.findEntityById(1L);
+        Book result = bookService.findEntityById(1L);
 
         assertNotNull(result);
         assertEquals("Test Book", result.getTitle());
@@ -148,7 +148,7 @@ class BookServiceTest {
         request.setAuthor("Updated Author");
 
         when(bookRepository.findById(1L)).thenReturn(Optional.of(book));
-        when(bookRepository.save(any(BookEntity.class))).thenReturn(book);
+        when(bookRepository.save(any(Book.class))).thenReturn(book);
 
         BookDto result = bookService.updateBookById(1L, request);
 

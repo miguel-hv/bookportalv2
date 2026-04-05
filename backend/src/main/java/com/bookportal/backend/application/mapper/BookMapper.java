@@ -3,11 +3,11 @@ package com.bookportal.backend.application.mapper;
 import com.bookportal.backend.dto.BookCreateRequest;
 import com.bookportal.backend.dto.BookDto;
 import com.bookportal.backend.dto.BookUserDto;
-import com.bookportal.backend.domain.model.BookEntity;
+import com.bookportal.backend.domain.model.Book;
 
 public class BookMapper {
 
-    public static BookDto toDto(BookEntity entity) {
+    public static BookDto toDto(Book entity) {
         if (entity == null) return null;
 
         return new BookDto(
@@ -18,7 +18,7 @@ public class BookMapper {
         );
     }
 
-    public static BookUserDto toBookUserDto(BookEntity entity) {
+    public static BookUserDto toBookUserDto(Book entity) {
         if (entity == null) return null;
 
         return new BookUserDto(
@@ -30,23 +30,20 @@ public class BookMapper {
         );
     }
 
-    public static BookEntity toEntity(BookDto dto) {
+    public static Book toEntity(BookDto dto) {
         if (dto == null) return null;
 
-        BookEntity entity = new BookEntity();
+        Book entity = new Book();
         entity.setTitle(dto.getTitle());
         entity.setAuthor(dto.getAuthor());
         entity.setReview(dto.getReview());
         return entity;
     }
 
-    public static BookEntity fromCreateRequest(BookCreateRequest dto) {
+    public static Book fromCreateRequest(BookCreateRequest dto) {
         if (dto == null) return null;
 
-        BookEntity entity = new BookEntity();
-        entity.setTitle(dto.getTitle());
-        entity.setAuthor(dto.getAuthor());
-        entity.setReview(dto.getReview());
+        Book entity = new Book(dto.getTitle(), dto.getAuthor(), dto.getReview());
         return entity;
     }
 }

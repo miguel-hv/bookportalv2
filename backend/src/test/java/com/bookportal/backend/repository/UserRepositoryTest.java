@@ -1,7 +1,7 @@
 package com.bookportal.backend.repository;
 
-import com.bookportal.backend.domain.model.RoleEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.Role;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.infrastructure.repository.UserRepository;
 import org.junit.jupiter.api.DisplayName;
@@ -26,11 +26,11 @@ class UserRepositoryTest {
     @Test
     @DisplayName("existsByUsername should return true when a user exists")
     void existsByUsername_shouldReturnTrue() {
-        RoleEntity role = new RoleEntity();
+        Role role = new Role();
         role.setName(ERole.ROLE_USER);
         entityManager.persist(role);
 
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUsername("john");
         user.setPassword("pass");
         user.setRoles(Set.of(role));
@@ -45,11 +45,11 @@ class UserRepositoryTest {
     @Test
     @DisplayName("findByUsername should return user when it exists")
     void findByUsername_shouldReturnUser() {
-        RoleEntity role = new RoleEntity();
+        Role role = new Role();
         role.setName(ERole.ROLE_USER);
         entityManager.persist(role);
 
-        UserEntity user = new UserEntity();
+        User user = new User();
         user.setUsername("john");
         user.setPassword("pass");
         user.setRoles(Set.of(role));

@@ -5,7 +5,7 @@ import com.bookportal.backend.dto.BookDto;
 import com.bookportal.backend.dto.BookPatchRequest;
 import com.bookportal.backend.dto.BookUserDto;
 import com.bookportal.backend.dto.MessageResponse;
-import com.bookportal.backend.domain.model.BookEntity;
+import com.bookportal.backend.domain.model.Book;
 import com.bookportal.backend.service.BookService;
 import com.bookportal.backend.util.SuccessMessages;
 import org.junit.jupiter.api.BeforeEach;
@@ -37,14 +37,14 @@ class BookControllerTest {
 
     private BookDto bookDto;
     private BookUserDto bookUserDto;
-    private BookEntity bookEntity;
+    private Book bookEntity;
     private Authentication authentication;
 
     @BeforeEach
     void setUp() {
         bookDto = new BookDto(1L, "Test Book", "Test Author", "Great!");
         bookUserDto = new BookUserDto(1L, "Test Book", "Test Author", "Great!", null);
-        bookEntity = new BookEntity();
+        bookEntity = new Book();
         bookEntity.setTitle("Test Book");
         authentication = mock(Authentication.class);
     }

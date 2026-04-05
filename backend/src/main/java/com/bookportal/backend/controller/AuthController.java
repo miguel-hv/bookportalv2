@@ -2,9 +2,9 @@ package com.bookportal.backend.controller;
 
 
 import com.bookportal.backend.dto.MessageResponse;
-import com.bookportal.backend.domain.model.RefreshTokenEntity;
-import com.bookportal.backend.domain.model.RoleEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.RefreshToken;
+import com.bookportal.backend.domain.model.Role;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.exception.AuthException;
 import com.bookportal.backend.exception.ValidationException;
@@ -102,22 +102,18 @@ public class AuthController {
             throw new ValidationException("Invalid role: " + request.getRole());
         }
 
-        Set<RoleEntity> roles = new HashSet<>();
-        RoleEntity userRole = roleRepository.findByName(ERole.ROLE_USER)
+        Set<Role> roles = new HashSet<>();
+        Role userRole = roleRepository.findByName(ERole.ROLE_USER)
                 .orElseThrow(() -> new RuntimeException(ErrorMessages.ROLE_NOT_FOUND.getMessage()));
         roles.add(userRole);
 
         if (eRole == ERole.ROLE_ADMIN) {
-            RoleEntity adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
+            Role adminRole = roleRepository.findByName(ERole.ROLE_ADMIN)
                     .orElseThrow(() -> new RuntimeException(ErrorMessages.ROLE_NOT_FOUND.getMessage()));
             roles.add(adminRole);
         }
-        UserEntity user = new UserEntity();
-        user.setUsername(request.getUsername());
-        user.setPassword(passwordEncoder.encode(request.getPassword()));
 
-        user.setRoles(roles);
-
+        User user = User.create(request.getUsername(), passwordEncoder.encode(request.getPassword()), roles);
         userRepository.save(user);
 
         log.info("User registered successfully: {} with role: {}", request.getUsername(), normalizedRole);
@@ -137,7 +133,7 @@ public class AuthController {
 
         var user = userRepository.findByUsername(request.getUsername()).orElseThrow();
         String token = jwtService.generateToken(user);
-        RefreshTokenEntity refreshToken = refreshTokenService.createRefreshToken(user);
+        RefreshToken refreshToken = refreshTokenService.createRefreshToken(user);
         var userResponse = UserMapper.toDto(user);
 
         log.info("User logged in successfully: {}", request.getUsername());
@@ -170,10 +166,10 @@ public class AuthController {
 
         return refreshTokenRepository.findByToken(refreshToken)
                 .map(refreshTokenService::verifyExpiration)
-                .map(RefreshTokenEntity::getUser)
+                .map(RefreshToken::getUser)
                 .map(user -> {
                     String newAccessToken = jwtService.generateToken(user);
-                    RefreshTokenEntity newRefreshToken = refreshTokenService.createRefreshToken(user);
+                    RefreshToken newRefreshToken = refreshTokenService.createRefreshToken(user);
                     ResponseCookie newCookie = ResponseCookie.from("refreshToken", newRefreshToken.getToken())
                             .httpOnly(true)
                             .secure(cookieSecure)

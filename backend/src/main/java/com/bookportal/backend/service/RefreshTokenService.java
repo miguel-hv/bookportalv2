@@ -1,7 +1,7 @@
 package com.bookportal.backend.service;
 
-import com.bookportal.backend.domain.model.RefreshTokenEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.RefreshToken;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
 import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,24 +22,24 @@ public class RefreshTokenService {
         this.refreshTokenRepository = refreshTokenRepository;
     }
 
-    public RefreshTokenEntity createRefreshToken(UserEntity user) {
-        RefreshTokenEntity token = new RefreshTokenEntity();
-        token.setUser(user);
-        token.setExpiryDate(Instant.now().plusMillis(refreshTokenDurationMs));
-        token.setToken(UUID.randomUUID().toString());
+    public RefreshToken createRefreshToken(User user) {
+        RefreshToken token = new RefreshToken(
+                user,
+                UUID.randomUUID().toString(),
+                Instant.now().plusMillis(refreshTokenDurationMs)
+        );
         return refreshTokenRepository.save(token);
     }
 
-    public RefreshTokenEntity verifyExpiration(RefreshTokenEntity token) {
-        if (token.getExpiryDate().isBefore(Instant.now())) {
+    public RefreshToken verifyExpiration(RefreshToken token) {
+        if (token.isExpired()) {
             refreshTokenRepository.delete(token);
             throw new RuntimeException(ErrorMessages.REFRESH_TOKEN_EXPIRED.getMessage());
         }
         return token;
     }
 
-    public void deleteByUser(UserEntity user) {
+    public void deleteByUser(User user) {
         refreshTokenRepository.deleteByUser(user);
     }
 }
-

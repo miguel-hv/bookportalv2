@@ -5,7 +5,8 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "roles")
-public class RoleEntity {
+@Access(AccessType.FIELD)
+public class Role {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -15,15 +16,15 @@ public class RoleEntity {
     @Column(unique = true, nullable = false, length = 20)
     private ERole name;
 
-    public RoleEntity() {}
+    public Role() {}
 
-    public RoleEntity(ERole name) {
+    public Role(ERole name) {
         this.name = name;
     }
 
     public Long getId() { return id; }
-
     public ERole getName() { return name; }
 
+    @Deprecated
     public void setName(ERole name) { this.name = name; }
 }

@@ -3,13 +3,13 @@ package com.bookportal.backend.application.mapper;
 import com.bookportal.backend.application.mapper.BookMapper;
 import com.bookportal.backend.dto.UserBookDto;
 import com.bookportal.backend.dto.UserDto;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.User;
 
 import java.util.stream.Collectors;
 
 public class UserMapper {
 
-    public static UserDto toDto(UserEntity entity) {
+    public static UserDto toDto(User entity) {
         if (entity == null) return null;
 
         return new UserDto(
@@ -22,7 +22,7 @@ public class UserMapper {
         );
     }
 
-    public static UserBookDto toDtoList(UserEntity entity) {
+    public static UserBookDto toDtoList(User entity) {
         if (entity == null) return null;
 
         return new UserBookDto(

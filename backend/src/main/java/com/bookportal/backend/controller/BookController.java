@@ -1,7 +1,7 @@
 package com.bookportal.backend.controller;
 
 import com.bookportal.backend.dto.*;
-import com.bookportal.backend.domain.model.BookEntity;
+import com.bookportal.backend.domain.model.Book;
 import com.bookportal.backend.service.BookService;
 import com.bookportal.backend.util.ErrorMessages;
 import com.bookportal.backend.util.SuccessMessages;
@@ -65,7 +65,7 @@ public class BookController {
     @PreAuthorize("@bookSecurity.isOwner(#id, authentication.name)")
     public ResponseEntity<?> editBook(@PathVariable Long id, @RequestBody BookPatchRequest request) {
         log.debug("Updating book: {}", id);
-        BookEntity book = bookService.findEntityById(id);
+        Book book = bookService.findEntityById(id);
         BookDto result = bookService.updateBookById(id, request);
         log.info("Book updated successfully - bookId: {}", id);
         return ResponseEntity.ok(result);

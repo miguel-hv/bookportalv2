@@ -1,7 +1,7 @@
 package com.bookportal.backend.service;
 
-import com.bookportal.backend.domain.model.RefreshTokenEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.RefreshToken;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,12 +23,12 @@ class RefreshTokenServiceTest {
     @InjectMocks
     private RefreshTokenService refreshTokenService;
 
-    private UserEntity user;
+    private User user;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
-        user = new UserEntity();
+        user = new User();
 
         // manually inject refreshTokenDurationMs since @Value won't work in a plain unit test
         refreshTokenService = new RefreshTokenService(refreshTokenRepository);
@@ -49,20 +49,20 @@ class RefreshTokenServiceTest {
     @Test
     void createRefreshToken_shouldGenerateAndSaveToken() {
         // Arrange
-        RefreshTokenEntity savedToken = new RefreshTokenEntity();
-        when(refreshTokenRepository.save(any(RefreshTokenEntity.class))).thenReturn(savedToken);
+        RefreshToken savedToken = new RefreshToken();
+        when(refreshTokenRepository.save(any(RefreshToken.class))).thenReturn(savedToken);
 
         // Act
-        RefreshTokenEntity result = refreshTokenService.createRefreshToken(user);
+        RefreshToken result = refreshTokenService.createRefreshToken(user);
 
         // Assert
         assertNotNull(result);
-        verify(refreshTokenRepository, times(1)).save(any(RefreshTokenEntity.class));
+        verify(refreshTokenRepository, times(1)).save(any(RefreshToken.class));
 
         // Capture and inspect saved token
-        ArgumentCaptor<RefreshTokenEntity> captor = ArgumentCaptor.forClass(RefreshTokenEntity.class);
+        ArgumentCaptor<RefreshToken> captor = ArgumentCaptor.forClass(RefreshToken.class);
         verify(refreshTokenRepository).save(captor.capture());
-        RefreshTokenEntity captured = captor.getValue();
+        RefreshToken captured = captor.getValue();
 
         assertEquals(user, captured.getUser());
         assertNotNull(captured.getToken());
@@ -71,10 +71,10 @@ class RefreshTokenServiceTest {
 
     @Test
     void verifyExpiration_shouldReturnTokenIfNotExpired() {
-        RefreshTokenEntity token = new RefreshTokenEntity();
+        RefreshToken token = new RefreshToken();
         token.setExpiryDate(Instant.now().plusSeconds(60));
 
-        RefreshTokenEntity result = refreshTokenService.verifyExpiration(token);
+        RefreshToken result = refreshTokenService.verifyExpiration(token);
 
         assertEquals(token, result);
         verify(refreshTokenRepository, never()).delete(any());
@@ -82,7 +82,7 @@ class RefreshTokenServiceTest {
 
     @Test
     void verifyExpiration_shouldThrowAndDeleteIfExpired() {
-        RefreshTokenEntity token = new RefreshTokenEntity();
+        RefreshToken token = new RefreshToken();
         token.setExpiryDate(Instant.now().minusSeconds(10));
 
         assertThrows(RuntimeException.class, () -> refreshTokenService.verifyExpiration(token));

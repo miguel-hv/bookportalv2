@@ -1,9 +1,9 @@
 package com.bookportal.backend.controller;
 
 import com.bookportal.backend.dto.MessageResponse;
-import com.bookportal.backend.domain.model.RefreshTokenEntity;
-import com.bookportal.backend.domain.model.RoleEntity;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.RefreshToken;
+import com.bookportal.backend.domain.model.Role;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
 import com.bookportal.backend.infrastructure.repository.RoleRepository;
@@ -83,11 +83,11 @@ class AuthControllerIntegrationTest {
         roleRepository.deleteAll();
 
         // Ensure roles exist in DB for register/login flows
-        RoleEntity userRole = new RoleEntity();
+        Role userRole = new Role();
         userRole.setName(ERole.ROLE_USER);
         roleRepository.save(userRole);
 
-        RoleEntity adminRole = new RoleEntity();
+        Role adminRole = new Role();
         adminRole.setName(ERole.ROLE_ADMIN);
         roleRepository.save(adminRole);
     }
@@ -118,8 +118,8 @@ class AuthControllerIntegrationTest {
     @Test
     void login_shouldReturnAccessTokenAndSetRefreshCookie() throws Exception {
         // create user in DB (roles required)
-        RoleEntity role = roleRepository.findByName(ERole.ROLE_USER).orElseThrow();
-        UserEntity user = new UserEntity();
+        Role role = roleRepository.findByName(ERole.ROLE_USER).orElseThrow();
+        User user = new User();
         user.setUsername("login-john");
         user.setPassword(passwordEncoder.encode("password"));
         user.setRoles(Set.of(role));
@@ -151,14 +151,14 @@ class AuthControllerIntegrationTest {
     @Test
     void refresh_shouldReturnNewAccessTokenAndCookie() throws Exception {
         // create user and a refresh token in DB
-        RoleEntity role = roleRepository.findByName(ERole.ROLE_USER).orElseThrow();
-        UserEntity user = new UserEntity();
+        Role role = roleRepository.findByName(ERole.ROLE_USER).orElseThrow();
+        User user = new User();
         user.setUsername("refresh-john");
         user.setPassword(passwordEncoder.encode("password"));
         user.setRoles(Set.of(role));
         userRepository.save(user);
 
-        RefreshTokenEntity rt = new RefreshTokenEntity();
+        RefreshToken rt = new RefreshToken();
         rt.setUser(user);
         String tokenValue = UUID.randomUUID().toString();
         rt.setToken(tokenValue);
@@ -183,14 +183,14 @@ class AuthControllerIntegrationTest {
     @Test
     void logout_shouldClearCookieAndDeleteRefreshToken() throws Exception {
         // create user and a refresh token in DB
-        RoleEntity role = roleRepository.findByName(ERole.ROLE_USER).orElseThrow();
-        UserEntity user = new UserEntity();
+        Role role = roleRepository.findByName(ERole.ROLE_USER).orElseThrow();
+        User user = new User();
         user.setUsername("logout-john");
         user.setPassword(passwordEncoder.encode("password"));
         user.setRoles(Set.of(role));
         userRepository.save(user);
 
-        RefreshTokenEntity rt = new RefreshTokenEntity();
+        RefreshToken rt = new RefreshToken();
         rt.setUser(user);
         String tokenValue = UUID.randomUUID().toString();
         rt.setToken(tokenValue);

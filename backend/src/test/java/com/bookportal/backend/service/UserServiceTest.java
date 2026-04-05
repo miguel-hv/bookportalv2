@@ -2,7 +2,7 @@ package com.bookportal.backend.service;
 
 import com.bookportal.backend.dto.UserBookDto;
 import com.bookportal.backend.dto.UserDto;
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.infrastructure.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,15 +26,15 @@ class UserServiceTest {
     @InjectMocks
     private UserService userService;
 
-    private UserEntity user1;
-    private UserEntity user2;
+    private User user1;
+    private User user2;
 
     @BeforeEach
     void setUp() {
-        user1 = new UserEntity();
+        user1 = new User();
         user1.setUsername("alice");
 
-        user2 = new UserEntity();
+        user2 = new User();
         user2.setUsername("bob");
     }
 

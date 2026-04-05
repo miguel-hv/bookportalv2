@@ -1,6 +1,6 @@
 package com.bookportal.backend.service;
 
-import com.bookportal.backend.domain.model.UserEntity;
+import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.util.ErrorMessages;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -24,7 +24,7 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UserEntity user = repository.findByUsername(username)
+        User user = repository.findByUsername(username)
                 .orElseThrow(() -> new UsernameNotFoundException(ErrorMessages.USER_NOT_FOUND.getMessage()));
 
         Set<GrantedAuthority> authorities = user.getRoles().stream()
