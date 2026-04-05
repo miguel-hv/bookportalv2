@@ -2,6 +2,7 @@ package com.bookportal.backend.controller;
 
 
 import com.bookportal.backend.dto.MessageResponse;
+import com.bookportal.backend.domain.events.UserRegisteredEvent;
 import com.bookportal.backend.domain.model.RefreshToken;
 import com.bookportal.backend.domain.model.Role;
 import com.bookportal.backend.domain.model.User;
@@ -11,6 +12,7 @@ import com.bookportal.backend.exception.ValidationException;
 import com.bookportal.backend.application.mapper.UserMapper;
 import com.bookportal.backend.model.LoginRequest;
 import com.bookportal.backend.model.RegisterRequest;
+import com.bookportal.backend.infrastructure.events.DomainEventDispatcher;
 import com.bookportal.backend.infrastructure.repository.RefreshTokenRepository;
 import com.bookportal.backend.infrastructure.repository.RoleRepository;
 import com.bookportal.backend.service.RefreshTokenService;
@@ -52,6 +54,7 @@ public class AuthController {
     private final RefreshTokenService refreshTokenService;
     private final RefreshTokenRepository refreshTokenRepository;
     private final RoleRepository roleRepository;
+    private final DomainEventDispatcher eventDispatcher;
 
     public AuthController(AuthenticationManager authenticationManager,
                           JwtService jwtService,
@@ -59,7 +62,8 @@ public class AuthController {
                           PasswordEncoder passwordEncoder,
                           RefreshTokenService refreshTokenService,
                           RefreshTokenRepository refreshTokenRepository,
-                          RoleRepository roleRepository) {
+                          RoleRepository roleRepository,
+                          DomainEventDispatcher eventDispatcher) {
         this.authenticationManager = authenticationManager;
         this.jwtService = jwtService;
         this.userRepository = userRepository;
@@ -67,6 +71,7 @@ public class AuthController {
         this.refreshTokenService = refreshTokenService;
         this.refreshTokenRepository = refreshTokenRepository;
         this.roleRepository = roleRepository;
+        this.eventDispatcher = eventDispatcher;
     }
 
     @Value("${cookie.secure:false}")
@@ -115,6 +120,8 @@ public class AuthController {
 
         User user = User.create(request.getUsername(), passwordEncoder.encode(request.getPassword()), roles);
         userRepository.save(user);
+
+        eventDispatcher.publish(new UserRegisteredEvent(user.getId(), user.getUsername(), normalizedRole));
 
         log.info("User registered successfully: {} with role: {}", request.getUsername(), normalizedRole);
         return ResponseEntity.ok(new MessageResponse(SuccessMessages.USER_REGISTERED.getMessage()));

@@ -27,23 +27,27 @@ Full-stack book management portal with Spring Boot backend and React frontend.
 bookportalv2/
 ├── backend/
 │   ├── src/main/java/com/bookportal/backend/
-│   │   ├── config/       # Configuration classes
-│   │   ├── controller/   # REST controllers
-│   │   ├── dto/          # Data Transfer Objects
-│   │   ├── entity/       # JPA entities
-│   │   ├── exception/    # Exception handlers
-│   │   ├── mapper/       # DTO <-> Entity mappers
-│   │   ├── model/        # Domain models
-│   │   ├── repository/   # JPA repositories
-│   │   ├── security/     # Security/JWT config
-│   │   ├── service/      # Business logic
-│   │   └── util/         # Utilities
+│   │   ├── config/           # Configuration classes
+│   │   ├── controller/      # REST controllers
+│   │   ├── dto/             # Data Transfer Objects
+│   │   ├── domain/          # Domain layer (DDD)
+│   │   │   ├── model/       # Rich domain entities
+│   │   │   └── events/      # Domain events
+│   │   ├── application/     # Application layer
+│   │   │   ├── dto/         # Request/Response DTOs
+│   │   │   └── mapper/      # DTO <-> Entity mappers
+│   │   ├── infrastructure/  # Infrastructure layer
+│   │   │   ├── repository/  # Spring Data repositories
+│   │   │   └── events/      # Event infrastructure
+│   │   ├── exception/       # Exception handlers
+│   │   ├── security/        # Security/JWT config
+│   │   ├── service/         # Business logic
+│   │   └── util/            # Utilities
 │   └── pom.xml
 ├── frontend/
-│   ├── src/              # React source
+│   ├── src/                 # React source
 │   └── package.json
-├── iaContext/            # AI context files
-│   └── auth_workflow_summary.md
+├── iaContext/               # AI context files
 ├── docker-compose.yml
 ├── docker-compose.prod.yml
 └── Makefile
@@ -107,5 +111,54 @@ Improves code quality, readability, and performance while maintaining test pass.
 
 - `iaContext/auth_workflow_summary.md` - Authentication flow details
 - `SEED_DATA_SUMMARY.md` - Database seed data
+
+---
+
+## Architecture
+
+### Domain Driven Design (DDD)
+
+The backend follows a DDD-inspired architecture:
+
+```
+backend/src/main/java/com/bookportal/backend/
+├── domain/
+│   ├── model/           # Rich domain entities with behavior
+│   │   ├── Book.java    # Book entity with update methods
+│   │   ├── User.java    # User aggregate with roles/books
+│   │   ├── Role.java    # Role value object
+│   │   └── RefreshToken.java
+│   └── events/          # Domain events
+│       ├── DomainEvent.java
+│       ├── BookAddedEvent.java
+│       └── UserRegisteredEvent.java
+├── application/
+│   ├── dto/             # Request/Response DTOs
+│   └── mapper/          # DTO mappers
+├── infrastructure/
+│   ├── repository/      # Spring Data repositories
+│   └── events/          # Event infrastructure
+│       ├── DomainEventDispatcher.java
+│       └── AuditEventListener.java
+├── controller/           # REST API controllers
+├── service/             # Application services
+└── security/            # Security components
+```
+
+### Key DDD Features
+
+- **Rich Domain Models**: Entities encapsulate business logic with update methods
+- **Field Access**: `@Access(AccessType.FIELD)` for Hibernate - no public setters
+- **Domain Events**: Decoupled event publishing for audit/logging
+- **Aggregates**: User as aggregate root managing Book collection
+
+### Logging
+
+The backend uses **both** direct logging and event-based logging for learning purposes:
+
+1. **Direct logging** (e.g., `log.info(...)`) - Traditional approach in controllers/services
+2. **Event-based logging** - Events are published and handled by `AuditEventListener`
+
+This demonstrates both patterns. In production, you would typically pick one approach.
 - `DOCKER-README.md` - Docker setup guide
 - `POSTGRESQL_SETUP.md` - PostgreSQL configuration

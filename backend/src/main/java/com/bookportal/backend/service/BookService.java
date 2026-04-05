@@ -5,8 +5,10 @@ import com.bookportal.backend.dto.BookDto;
 import com.bookportal.backend.dto.BookPatchRequest;
 import com.bookportal.backend.dto.BookUserDto;
 import com.bookportal.backend.application.mapper.BookMapper;
+import com.bookportal.backend.domain.events.BookAddedEvent;
 import com.bookportal.backend.domain.model.Book;
 import com.bookportal.backend.domain.model.User;
+import com.bookportal.backend.infrastructure.events.DomainEventDispatcher;
 import com.bookportal.backend.infrastructure.repository.BookRepository;
 import com.bookportal.backend.infrastructure.repository.UserRepository;
 import com.bookportal.backend.util.ErrorMessages;
@@ -21,10 +23,12 @@ public class BookService {
 
     private final BookRepository bookRepository;
     private final UserRepository userRepository;
+    private final DomainEventDispatcher eventDispatcher;
 
-    public BookService(BookRepository bookRepository, UserRepository userRepository) {
+    public BookService(BookRepository bookRepository, UserRepository userRepository, DomainEventDispatcher eventDispatcher) {
         this.bookRepository = bookRepository;
         this.userRepository = userRepository;
+        this.eventDispatcher = eventDispatcher;
     }
 
     @Transactional
@@ -35,6 +39,13 @@ public class BookService {
         Book book = BookMapper.fromCreateRequest(request);
         user.addBook(book);
         bookRepository.save(book);
+
+        eventDispatcher.publish(new BookAddedEvent(
+                book.getId(),
+                userId,
+                book.getTitle(),
+                book.getAuthor()
+        ));
 
         return BookMapper.toDto(book);
     }

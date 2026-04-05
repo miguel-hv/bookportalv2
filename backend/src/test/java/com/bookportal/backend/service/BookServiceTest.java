@@ -8,6 +8,7 @@ import com.bookportal.backend.domain.model.Book;
 import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.exception.ResourceNotFoundException;
 import com.bookportal.backend.application.mapper.BookMapper;
+import com.bookportal.backend.infrastructure.events.DomainEventDispatcher;
 import com.bookportal.backend.infrastructure.repository.BookRepository;
 import com.bookportal.backend.infrastructure.repository.UserRepository;
 import com.bookportal.backend.util.ErrorMessages;
@@ -33,6 +34,9 @@ class BookServiceTest {
 
     @Mock
     private UserRepository userRepository;
+
+    @Mock
+    private DomainEventDispatcher eventDispatcher;
 
     @InjectMocks
     private BookService bookService;

@@ -5,6 +5,7 @@ import com.bookportal.backend.domain.model.Role;
 import com.bookportal.backend.domain.model.User;
 import com.bookportal.backend.domain.model.enums.ERole;
 import com.bookportal.backend.exception.ValidationException;
+import com.bookportal.backend.infrastructure.events.DomainEventDispatcher;
 import com.bookportal.backend.model.RegisterRequest;
 import com.bookportal.backend.infrastructure.repository.RoleRepository;
 import com.bookportal.backend.infrastructure.repository.UserRepository;
@@ -51,6 +52,9 @@ class AuthControllerTest {
 
     @Mock
     private com.bookportal.backend.infrastructure.repository.RefreshTokenRepository refreshTokenRepository;
+
+    @Mock
+    private DomainEventDispatcher eventDispatcher;
 
     @InjectMocks
     private AuthController controller;
